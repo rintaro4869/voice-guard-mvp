@@ -29,6 +29,11 @@ const voiceOptions = document.getElementById("voiceOptions");
 const statusEl = document.getElementById("status");
 const errorEl = document.getElementById("error");
 const randomHint = document.getElementById("randomHint");
+const installSection = document.getElementById("installSection");
+const installTabs = document.querySelectorAll(".install-tab");
+const installPanels = document.querySelectorAll(".install-steps");
+const installHint = document.getElementById("installHint");
+const installNowBtn = document.getElementById("installNowBtn");
 
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
@@ -50,6 +55,7 @@ if (state.voiceId === "random") {
 }
 updateRandomHint();
 primeAudio();
+setupInstallPrompt();
 
 playBtn.addEventListener("click", handlePlay);
 playBtnTop.addEventListener("click", handlePlay);
@@ -253,6 +259,71 @@ function playTestTone() {
   setTimeout(() => {
     oscillator.stop();
   }, 220);
+}
+
+function setupInstallPrompt() {
+  if (!installSection) {
+    return;
+  }
+
+  const isIOS =
+    /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+  const initialPlatform = isIOS ? "ios" : isAndroid ? "android" : "ios";
+  setInstallPlatform(initialPlatform);
+
+  installTabs.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setInstallPlatform(btn.dataset.platform);
+    });
+  });
+
+  if (installHint) {
+    if (isStandalone) {
+      installHint.textContent = "ホーム画面に追加済みです。";
+    } else if (isIOS) {
+      installHint.textContent = "iPhoneはSafariで共有から追加できます。";
+    } else if (isAndroid) {
+      installHint.textContent = "AndroidはChromeのメニューから追加できます。";
+    } else {
+      installHint.textContent = "PCではホーム画面追加が表示されないことがあります。";
+    }
+  }
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    window.__vgInstallPrompt = event;
+    if (installNowBtn) {
+      installNowBtn.hidden = false;
+    }
+  });
+
+  if (installNowBtn) {
+    installNowBtn.addEventListener("click", async () => {
+      const promptEvent = window.__vgInstallPrompt;
+      if (!promptEvent) {
+        return;
+      }
+      promptEvent.prompt();
+      await promptEvent.userChoice;
+      window.__vgInstallPrompt = null;
+      installNowBtn.hidden = true;
+    });
+  }
+}
+
+function setInstallPlatform(platform) {
+  installTabs.forEach((btn) => {
+    btn.classList.toggle("selected", btn.dataset.platform === platform);
+  });
+  installPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.platform !== platform;
+  });
 }
 
 function loadValue(key, fallback) {

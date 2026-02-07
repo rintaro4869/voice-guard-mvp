@@ -1,0 +1,21 @@
+{
+  "name": "ひとり防犯ボイス",
+  "short_name": "防犯ボイス",
+  "start_url": "/?source=a2hs",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4efe7",
+  "theme_color": "#2a9d8f",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -151,6 +151,25 @@ body {
   margin-top: 14px;
 }
 
+.install-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.install-steps {
+  margin-top: 12px;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .phrase-row {
   display: grid;
   grid-template-columns: 1fr auto;
