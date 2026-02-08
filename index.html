@@ -103,9 +103,14 @@
         <div class="volume-bar">
           <span class="volume-fill"></span>
         </div>
+        <div class="volume-controls">
+          <label class="volume-label" for="volumeRange">アプリ音量（目安）</label>
+          <input id="volumeRange" class="volume-range" type="range" min="20" max="100" step="5" value="70" />
+          <div id="volumeValue" class="volume-value">70%</div>
+        </div>
         <button id="testToneBtn" class="btn" type="button">テスト音を鳴らす</button>
       </div>
-      <p class="note">※端末の音量はアプリから取得できないため、バーは目安表示です。</p>
+      <p class="note">※端末の音量は取得できません。物理ボタンで調整し、このバーはアプリ側の目安として使ってください。</p>
     </section>
 
     <section class="card">
@@ -131,7 +136,7 @@
         <p class="sub">1タップで即再生。途中停止も可能です。</p>
       </div>
       <div class="controls">
-        <button id="playBtn" class="btn primary" type="button">再生</button>
+        <button id="playBtn" class="btn primary" type="button" aria-label="再生">▶</button>
         <button id="stopBtn" class="btn ghost" type="button">停止</button>
       </div>
       <div id="status" class="status">準備完了</div>

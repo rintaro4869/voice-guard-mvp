@@ -14,12 +14,14 @@ const voices = [
 
 const STORAGE_KEYS = {
   phrase: "vg_phrase",
-  voice: "vg_voice"
+  voice: "vg_voice",
+  volume: "vg_volume"
 };
 
 const state = {
   phraseId: loadValue(STORAGE_KEYS.phrase, phrases[0].id),
   voiceId: loadValue(STORAGE_KEYS.voice, voices[0].id),
+  volume: loadNumber(STORAGE_KEYS.volume, 0.7),
   randomVoiceId: null,
   currentAudio: null
 };
@@ -29,6 +31,9 @@ const voiceOptions = document.getElementById("voiceOptions");
 const statusEl = document.getElementById("status");
 const errorEl = document.getElementById("error");
 const randomHint = document.getElementById("randomHint");
+const volumeRange = document.getElementById("volumeRange");
+const volumeValue = document.getElementById("volumeValue");
+const volumeFill = document.querySelector(".volume-fill");
 const installSection = document.getElementById("installSection");
 const installTabs = document.querySelectorAll(".install-tab");
 const installPanels = document.querySelectorAll(".install-steps");
@@ -49,6 +54,7 @@ let audioContext;
 
 renderPhraseOptions();
 renderOptions(voiceOptions, voices, state.voiceId, voiceButtons, selectVoice);
+setupVolumeControls();
 
 if (state.voiceId === "random") {
   state.randomVoiceId = pickRandomVoiceId();
@@ -98,7 +104,8 @@ function renderPhraseOptions() {
     const playBtn = document.createElement("button");
     playBtn.type = "button";
     playBtn.className = "btn small";
-    playBtn.textContent = "再生";
+    playBtn.textContent = "▶";
+    playBtn.setAttribute("aria-label", "再生");
     playBtn.addEventListener("click", () => {
       selectPhrase(item.id);
       handlePlay();
@@ -180,6 +187,7 @@ function getAudio(voiceId, phraseId) {
   }
   const src = `assets/audio/${voiceId}/${phraseId}.wav`;
   const audio = new Audio(src);
+  audio.volume = state.volume;
   audio.preload = "auto";
   audio.addEventListener("error", () => {
     if (state.currentAudio === audio) {
@@ -202,6 +210,7 @@ async function handlePlay() {
   }
 
   const audio = getAudio(voiceId, state.phraseId);
+  audio.volume = state.volume;
   state.currentAudio = audio;
   updateStatus(`再生中: ${label}`);
 
@@ -252,13 +261,46 @@ function playTestTone() {
   const gainNode = audioContext.createGain();
   oscillator.type = "sine";
   oscillator.frequency.value = 440;
-  gainNode.gain.value = 0.08;
+  gainNode.gain.value = 0.02 + 0.18 * state.volume;
   oscillator.connect(gainNode);
   gainNode.connect(audioContext.destination);
   oscillator.start();
   setTimeout(() => {
     oscillator.stop();
   }, 220);
+}
+
+function setupVolumeControls() {
+  if (!volumeRange) {
+    return;
+  }
+  const percent = Math.round(state.volume * 100);
+  volumeRange.value = String(percent);
+  updateVolumeUI(percent);
+
+  volumeRange.addEventListener("input", (event) => {
+    const value = Number(event.target.value);
+    setVolume(value / 100);
+  });
+}
+
+function setVolume(value) {
+  const clamped = Math.min(Math.max(value, 0.2), 1);
+  state.volume = clamped;
+  persist(STORAGE_KEYS.volume, clamped);
+  updateVolumeUI(Math.round(clamped * 100));
+  audioCache.forEach((audio) => {
+    audio.volume = clamped;
+  });
+}
+
+function updateVolumeUI(percent) {
+  if (volumeValue) {
+    volumeValue.textContent = `${percent}%`;
+  }
+  if (volumeFill) {
+    volumeFill.style.width = `${percent}%`;
+  }
 }
 
 function setupInstallPrompt() {
@@ -330,6 +372,16 @@ function loadValue(key, fallback) {
   try {
     const value = localStorage.getItem(key);
     return value ?? fallback;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function loadNumber(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
   } catch (error) {
     return fallback;
   }
