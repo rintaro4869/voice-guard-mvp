@@ -285,13 +285,13 @@ function setupInstallPrompt() {
 
   if (installHint) {
     if (isStandalone) {
-      installHint.textContent = "ホーム画面に追加済みです。";
+      installHint.textContent = "すでにホーム画面に追加されています。";
     } else if (isIOS) {
-      installHint.textContent = "iPhoneはSafariで共有から追加できます。";
+      installHint.textContent = "iPhoneはSafariの共有から追加できます。";
     } else if (isAndroid) {
       installHint.textContent = "AndroidはChromeのメニューから追加できます。";
     } else {
-      installHint.textContent = "PCではホーム画面追加が表示されないことがあります。";
+      installHint.textContent = "PCでは表示されないことがあります。";
     }
   }
 
