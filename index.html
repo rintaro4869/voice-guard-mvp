@@ -118,17 +118,32 @@
       <p id="randomHint" class="note"></p>
     </section>
 
-    <section class="card">
+    <section class="card" id="installSection">
       <div class="card-head">
-        <h2>4. 再生</h2>
-        <p class="sub">1タップで即再生。途中停止も可能です。</p>
+        <h2>ホーム画面に追加</h2>
+        <p class="sub">気に入りましたか？ホーム画面に追加すれば、いつでもすぐに起動できます。</p>
       </div>
-      <div class="controls">
-        <button id="playBtn" class="btn primary" type="button" aria-label="再生">▶</button>
-        <button id="stopBtn" class="btn ghost" type="button">停止</button>
+      <div class="install-tabs" role="tablist" aria-label="端末別の追加手順">
+        <button class="option-btn install-tab" type="button" data-platform="ios" role="tab">iPhone</button>
+        <button class="option-btn install-tab" type="button" data-platform="android" role="tab">Android</button>
       </div>
-      <div id="status" class="status">準備完了</div>
-      <div id="error" class="error" role="alert" aria-live="polite"></div>
+      <div class="install-steps" data-platform="ios" role="tabpanel">
+        <ol class="steps">
+          <li>Safariでこのページを開く</li>
+          <li>共有ボタン（□↑）をタップ</li>
+          <li>「ホーム画面に追加」を選ぶ</li>
+          <li>右上の「追加」をタップ</li>
+        </ol>
+      </div>
+      <div class="install-steps" data-platform="android" role="tabpanel" hidden>
+        <ol class="steps">
+          <li>Chromeでこのページを開く</li>
+          <li>右上のメニュー（⋮）をタップ</li>
+          <li>「ホーム画面に追加」を選ぶ</li>
+          <li>「追加」をタップ</li>
+        </ol>
+      </div>
+      <p class="note">PCでは表示されないことがあります。</p>
     </section>
 
     <section class="card">
@@ -188,35 +203,6 @@
         <li><a href="./recommend-intercom.html">スマートドアホンの選び方｜インターホン対応を短く</a></li>
         <li><a href="./recommend-buzzer.html">防犯ブザー・防犯グッズの選び方｜一人暮らし向け</a></li>
       </ul>
-    </section>
-
-    <section class="card" id="installSection">
-      <div class="card-head">
-        <h2>ホーム画面に追加</h2>
-        <p class="sub">気に入りましたか？ホーム画面に追加すれば、いつでもすぐに起動できます。</p>
-      </div>
-      <div class="install-tabs" role="tablist" aria-label="端末別の追加手順">
-        <button class="option-btn install-tab" type="button" data-platform="ios" role="tab">iPhone</button>
-        <button class="option-btn install-tab" type="button" data-platform="android" role="tab">Android</button>
-      </div>
-      <div class="install-steps" data-platform="ios" role="tabpanel">
-        <ol class="steps">
-          <li>Safariでこのページを開く</li>
-          <li>共有ボタン（□↑）をタップ</li>
-          <li>「ホーム画面に追加」を選ぶ</li>
-          <li>右上の「追加」をタップ</li>
-        </ol>
-      </div>
-      <div class="install-steps" data-platform="android" role="tabpanel" hidden>
-        <ol class="steps">
-          <li>Chromeでこのページを開く</li>
-          <li>右上のメニュー（⋮）をタップ</li>
-          <li>「ホーム画面に追加」を選ぶ</li>
-          <li>「追加」をタップ</li>
-        </ol>
-        <button id="installNowBtn" class="btn small primary" type="button" hidden>インストール</button>
-      </div>
-      <p id="installHint" class="note"></p>
     </section>
 
     <section class="card subtle">

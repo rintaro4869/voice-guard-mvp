@@ -32,9 +32,6 @@ const randomHint = document.getElementById("randomHint");
 const installSection = document.getElementById("installSection");
 const installTabs = document.querySelectorAll(".install-tab");
 const installPanels = document.querySelectorAll(".install-steps");
-const installHint = document.getElementById("installHint");
-const installNowBtn = document.getElementById("installNowBtn");
-
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
 const playBtnTop = document.getElementById("playBtnTop");
@@ -54,9 +51,13 @@ updateRandomHint();
 primeAudio();
 setupInstallPrompt();
 
-playBtn.addEventListener("click", handlePlay);
+if (playBtn) {
+  playBtn.addEventListener("click", handlePlay);
+}
 playBtnTop.addEventListener("click", handlePlay);
-stopBtn.addEventListener("click", handleStop);
+if (stopBtn) {
+  stopBtn.addEventListener("click", handleStop);
+}
 stopBtnTop.addEventListener("click", handleStop);
 
 function renderOptions(container, items, selectedId, map, onSelect) {
@@ -226,14 +227,23 @@ function handleStop() {
 }
 
 function updateStatus(message) {
+  if (!statusEl) {
+    return;
+  }
   statusEl.textContent = message;
 }
 
 function showError(message) {
+  if (!errorEl) {
+    return;
+  }
   errorEl.textContent = message;
 }
 
 function clearError() {
+  if (!errorEl) {
+    return;
+  }
   errorEl.textContent = "";
 }
 
@@ -259,38 +269,9 @@ function setupInstallPrompt() {
     });
   });
 
-  if (installHint) {
-    if (isStandalone) {
-      installHint.textContent = "すでにホーム画面に追加されています。";
-    } else if (isIOS) {
-      installHint.textContent = "iPhoneはSafariの共有から追加できます。";
-    } else if (isAndroid) {
-      installHint.textContent = "AndroidはChromeのメニューから追加できます。";
-    } else {
-      installHint.textContent = "PCでは表示されないことがあります。";
-    }
-  }
-
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
-    window.__vgInstallPrompt = event;
-    if (installNowBtn) {
-      installNowBtn.hidden = false;
-    }
   });
-
-  if (installNowBtn) {
-    installNowBtn.addEventListener("click", async () => {
-      const promptEvent = window.__vgInstallPrompt;
-      if (!promptEvent) {
-        return;
-      }
-      promptEvent.prompt();
-      await promptEvent.userChoice;
-      window.__vgInstallPrompt = null;
-      installNowBtn.hidden = true;
-    });
-  }
 }
 
 function setInstallPlatform(platform) {
