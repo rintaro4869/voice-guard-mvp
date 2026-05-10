@@ -17,9 +17,11 @@ const STORAGE_KEYS = {
   voice: "vg_voice"
 };
 
+const launchParams = getLaunchParams();
+
 const state = {
-  phraseId: loadValue(STORAGE_KEYS.phrase, phrases[0].id),
-  voiceId: loadValue(STORAGE_KEYS.voice, voices[0].id),
+  phraseId: getInitialPhraseId(),
+  voiceId: getInitialVoiceId(),
   randomVoiceId: null,
   currentAudio: null
 };
@@ -29,9 +31,13 @@ const voiceOptions = document.getElementById("voiceOptions");
 const statusEl = document.getElementById("status");
 const errorEl = document.getElementById("error");
 const randomHint = document.getElementById("randomHint");
+const selectedPhraseLabel = document.getElementById("selectedPhraseLabel");
+const selectedVoiceLabel = document.getElementById("selectedVoiceLabel");
 const installSection = document.getElementById("installSection");
 const installTabs = document.querySelectorAll(".install-tab");
 const installPanels = document.querySelectorAll(".install-steps");
+const scenarioPresets = document.getElementById("scenarioPresets");
+const mainPlayCard = document.getElementById("mainPlayCard");
 const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
 const playBtnTop = document.getElementById("playBtnTop");
@@ -40,6 +46,7 @@ const stopBtnTop = document.getElementById("stopBtnTop");
 const phraseButtons = new Map();
 const voiceButtons = new Map();
 const audioCache = new Map();
+const trackedScrollMilestones = new Set();
 
 renderPhraseOptions();
 renderOptions(voiceOptions, voices, state.voiceId, voiceButtons, selectVoice);
@@ -48,13 +55,18 @@ if (state.voiceId === "random") {
   state.randomVoiceId = pickRandomVoiceId();
 }
 updateRandomHint();
+updateSelectionSummary();
 primeAudio();
 setupInstallPrompt();
+setupScenarioPresets();
+setupAnalytics();
+announceLaunchContext();
+registerServiceWorker();
 
 if (playBtn) {
-  playBtn.addEventListener("click", handlePlay);
+  playBtn.addEventListener("click", () => handlePlay("main_play_button"));
 }
-playBtnTop.addEventListener("click", handlePlay);
+playBtnTop.addEventListener("click", () => handlePlay("hero_play_button"));
 if (stopBtn) {
   stopBtn.addEventListener("click", handleStop);
 }
@@ -98,7 +110,7 @@ function renderPhraseOptions() {
     playBtn.setAttribute("aria-label", "再生");
     playBtn.addEventListener("click", () => {
       selectPhrase(item.id);
-      handlePlay();
+      handlePlay("phrase_row_play_button");
     });
 
     row.append(selectBtn, playBtn);
@@ -108,14 +120,23 @@ function renderPhraseOptions() {
 }
 
 function selectPhrase(id) {
+  const previousId = state.phraseId;
   state.phraseId = id;
   persist(STORAGE_KEYS.phrase, id);
   updateSelected(phraseButtons, id);
   primeAudio();
+  updateSelectionSummary();
   updateStatus("セリフを選択済み");
+  if (previousId !== id) {
+    trackEvent("select_phrase", {
+      phrase_id: id,
+      phrase_label: phrases.find((item) => item.id === id)?.label
+    });
+  }
 }
 
 function selectVoice(id) {
+  const previousId = state.voiceId;
   state.voiceId = id;
   persist(STORAGE_KEYS.voice, id);
   updateSelected(voiceButtons, id);
@@ -128,7 +149,14 @@ function selectVoice(id) {
 
   updateRandomHint();
   primeAudio();
+  updateSelectionSummary();
   updateStatus("声タイプを選択済み");
+  if (previousId !== id) {
+    trackEvent("select_voice", {
+      voice_id: id,
+      voice_label: voices.find((item) => item.id === id)?.label
+    });
+  }
 }
 
 function updateSelected(map, selectedId) {
@@ -146,6 +174,28 @@ function updateRandomHint() {
   randomHint.textContent = voice
     ? `今回の声: ${voice.label}`
     : "おまかせ選択中";
+}
+
+function updateSelectionSummary() {
+  const phrase = phrases.find((item) => item.id === state.phraseId);
+  const selectedVoice = voices.find((item) => item.id === state.voiceId);
+  const effectiveVoiceId = getEffectiveVoiceId();
+  const effectiveVoice = voices.find((item) => item.id === effectiveVoiceId);
+
+  if (selectedPhraseLabel) {
+    selectedPhraseLabel.textContent = phrase?.label ?? "はい";
+  }
+
+  if (!selectedVoiceLabel) {
+    return;
+  }
+
+  if (state.voiceId === "random" && effectiveVoice) {
+    selectedVoiceLabel.textContent = `${selectedVoice?.label ?? "おまかせ"}（今回: ${effectiveVoice.label}）`;
+    return;
+  }
+
+  selectedVoiceLabel.textContent = effectiveVoice?.label ?? selectedVoice?.label ?? "若めの声（丁寧）";
 }
 
 function getEffectiveVoiceId() {
@@ -187,7 +237,7 @@ function getAudio(voiceId, phraseId) {
   return audio;
 }
 
-async function handlePlay() {
+async function handlePlay(source = "unknown") {
   clearError();
   const phrase = phrases.find((p) => p.id === state.phraseId);
   const voiceId = getEffectiveVoiceId();
@@ -201,16 +251,35 @@ async function handlePlay() {
   const audio = getAudio(voiceId, state.phraseId);
   state.currentAudio = audio;
   updateStatus(`再生中: ${label}`);
+  trackEvent("play_audio", {
+    source,
+    phrase_id: state.phraseId,
+    phrase_label: phrase?.label,
+    voice_id: voiceId,
+    voice_label: voice?.label
+  });
 
   try {
     await audio.play();
   } catch (error) {
     showError("再生に失敗しました。もう一度タップしてください。");
+    trackEvent("audio_play_error", {
+      source,
+      phrase_id: state.phraseId,
+      voice_id: voiceId
+    });
   }
 
   audio.onended = () => {
     if (state.currentAudio === audio) {
+      state.currentAudio = null;
       updateStatus("再生完了");
+      trackEvent("audio_complete", {
+        phrase_id: state.phraseId,
+        phrase_label: phrase?.label,
+        voice_id: voiceId,
+        voice_label: voice?.label
+      });
     }
   };
 }
@@ -220,6 +289,10 @@ function handleStop() {
     updateStatus("停止");
     return;
   }
+  trackEvent("stop_audio", {
+    phrase_id: state.phraseId,
+    voice_id: getEffectiveVoiceId()
+  });
   state.currentAudio.pause();
   state.currentAudio.currentTime = 0;
   state.currentAudio = null;
@@ -266,6 +339,9 @@ function setupInstallPrompt() {
   installTabs.forEach((btn) => {
     btn.addEventListener("click", () => {
       setInstallPlatform(btn.dataset.platform);
+      trackEvent("select_install_tab", {
+        platform: btn.dataset.platform
+      });
     });
   });
 
@@ -283,6 +359,104 @@ function setInstallPlatform(platform) {
   });
 }
 
+function setupScenarioPresets() {
+  if (!scenarioPresets) {
+    return;
+  }
+  const buttons = scenarioPresets.querySelectorAll("[data-scenario]");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const { phrase, voice, scenario } = button.dataset;
+      if (phrase) {
+        selectPhrase(phrase);
+      }
+      if (voice) {
+        selectVoice(voice);
+      }
+      updateStatus("おすすめ設定を適用しました。再生ボタンを押すとすぐ使えます。");
+      scrollToPrimaryControls();
+      trackEvent("select_scenario_preset", {
+        scenario,
+        phrase_id: phrase,
+        voice_id: voice
+      });
+    });
+  });
+}
+
+function setupAnalytics() {
+  document.addEventListener("click", trackLinkClick, { passive: true });
+  window.addEventListener("scroll", trackScrollDepth, { passive: true });
+}
+
+function scrollToPrimaryControls() {
+  if (!mainPlayCard) {
+    return;
+  }
+  mainPlayCard.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+function trackLinkClick(event) {
+  const anchor = event.target.closest("a[href]");
+  if (!anchor) {
+    return;
+  }
+
+  let url;
+  try {
+    url = new URL(anchor.href, window.location.href);
+  } catch (error) {
+    return;
+  }
+
+  const label = anchor.textContent?.trim().slice(0, 80) || url.pathname;
+
+  if (url.origin === window.location.origin) {
+    trackEvent("internal_link_click", {
+      destination_path: url.pathname,
+      link_label: label
+    });
+    return;
+  }
+
+  trackEvent("outbound_link_click", {
+    destination_host: url.host,
+    destination_path: url.pathname,
+    link_label: label
+  });
+}
+
+function trackScrollDepth() {
+  const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if (scrollableHeight <= 0) {
+    return;
+  }
+
+  const progress = (window.scrollY / scrollableHeight) * 100;
+  [25, 50, 75].forEach((milestone) => {
+    if (progress >= milestone && !trackedScrollMilestones.has(milestone)) {
+      trackedScrollMilestones.add(milestone);
+      trackEvent("scroll_depth", {
+        percent_scrolled: milestone
+      });
+    }
+  });
+}
+
+function trackEvent(name, params = {}) {
+  if (typeof window.gtag !== "function") {
+    return;
+  }
+  try {
+    window.gtag("event", name, params);
+  } catch (error) {
+    // analytics unavailable
+  }
+}
+
 function loadValue(key, fallback) {
   try {
     const value = localStorage.getItem(key);
@@ -298,4 +472,86 @@ function persist(key, value) {
   } catch (error) {
     // localStorage unavailable
   }
+}
+
+function getInitialPhraseId() {
+  if (isValidPhraseId(launchParams.phrase)) {
+    return launchParams.phrase;
+  }
+  return loadValue(STORAGE_KEYS.phrase, phrases[0].id);
+}
+
+function getInitialVoiceId() {
+  if (isValidVoiceId(launchParams.voice)) {
+    return launchParams.voice;
+  }
+  return loadValue(STORAGE_KEYS.voice, voices[0].id);
+}
+
+function getLaunchParams() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      source: params.get("source") || "",
+      phrase: params.get("phrase") || "",
+      voice: params.get("voice") || ""
+    };
+  } catch (error) {
+    return {
+      source: "",
+      phrase: "",
+      voice: ""
+    };
+  }
+}
+
+function isValidPhraseId(id) {
+  return phrases.some((item) => item.id === id);
+}
+
+function isValidVoiceId(id) {
+  return voices.some((item) => item.id === id);
+}
+
+function announceLaunchContext() {
+  const source = launchParams.source || "direct";
+  const displayMode = window.matchMedia("(display-mode: standalone)").matches ? "standalone" : "browser";
+
+  if (source === "shortcut") {
+    updateStatus("ショートカットから起動しました。再生ボタンを押すとすぐ使えます。");
+  } else if (source === "a2hs" && displayMode === "standalone") {
+    updateStatus("ホーム画面から起動しました。再生ボタンを押すとすぐ使えます。");
+  }
+
+  trackEvent("launch_app", {
+    source,
+    display_mode: displayMode,
+    phrase_id: state.phraseId,
+    voice_id: state.voiceId
+  });
+
+  clearLaunchQuery();
+}
+
+function clearLaunchQuery() {
+  if (!window.history.replaceState || !window.location.search) {
+    return;
+  }
+  const cleanedUrl = `${window.location.pathname}${window.location.hash}`;
+  window.history.replaceState({}, document.title, cleanedUrl);
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || window.location.protocol !== "https:") {
+    return;
+  }
+
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("./sw.js");
+      trackEvent("service_worker_registered");
+    } catch (error) {
+      trackEvent("service_worker_register_error");
+    }
+  });
 }

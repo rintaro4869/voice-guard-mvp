@@ -151,6 +151,76 @@ body {
   margin-top: 14px;
 }
 
+.preset-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.preset-card {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(42, 157, 143, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(42, 157, 143, 0.08));
+  box-shadow: 0 12px 22px rgba(28, 31, 42, 0.08);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+}
+
+.preset-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 24px rgba(28, 31, 42, 0.12);
+  border-color: rgba(42, 157, 143, 0.35);
+}
+
+.preset-card strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.preset-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#mainPlayCard {
+  scroll-margin-top: 24px;
+}
+
+.selection-summary {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.selection-pill {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(42, 157, 143, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(42, 157, 143, 0.08));
+}
+
+.selection-pill span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.selection-pill strong {
+  display: block;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
 .install-tabs {
   display: flex;
   gap: 10px;
@@ -309,6 +379,7 @@ body {
   font-size: 13px;
   line-height: 1.6;
 }
+
 
 .subtle {
   background: rgba(255, 255, 255, 0.6);
@@ -517,6 +588,14 @@ body {
 
 @media (min-width: 720px) {
   .options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .preset-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .selection-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
