@@ -27,6 +27,8 @@ node scripts/check-affiliates.mjs
 
 - 現在のアプリ/市場前提: `app-marketing-context.md`
 - 2026-05-22 時点の収益化見直し方針: `docs/monetization-strategy-reset-20260522.md`
+- 国内外のリサーチ込みの戦略書: `docs/global-monetization-strategy-20260522.md`
+- 実行タスクの優先順: `docs/execution-roadmap-20260523.md`
 
 ## 音声ファイルの配置
 
