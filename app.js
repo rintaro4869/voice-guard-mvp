@@ -537,7 +537,17 @@ function clearLaunchQuery() {
   if (!window.history.replaceState || !window.location.search) {
     return;
   }
-  const cleanedUrl = `${window.location.pathname}${window.location.hash}`;
+
+  const url = new URL(window.location.href);
+  ["source", "phrase", "voice"].forEach((key) => {
+    url.searchParams.delete(key);
+  });
+
+  let cleanedUrl = url.pathname;
+  if (url.searchParams.toString()) {
+    cleanedUrl += `?${url.searchParams.toString()}`;
+  }
+  cleanedUrl += url.hash;
   window.history.replaceState({}, document.title, cleanedUrl);
 }
 

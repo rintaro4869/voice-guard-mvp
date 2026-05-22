@@ -164,7 +164,7 @@
   }
   </script>
 </head>
-<body>
+<body data-page-role="app_home">
   <div class="ambient"></div>
   <header class="hero">
     <div class="badge">配達対応の不安を、ワンタップで軽くする</div>
@@ -175,7 +175,7 @@
       <button id="stopBtnTop" class="btn ghost" type="button">停止</button>
     </div>
     <p class="note">※再生はユーザー操作が必要です。インターホンが鳴ったらこのボタンをタップ。</p>
-    <p class="note">無料で使いながら玄関対策も強化したい方は、<a href="./safety-plan">防犯アイテム比較を見る</a> から次の一手を選べます。</p>
+    <p class="note">無料で使いながら玄関対策も強化したい方は、<a href="./safety-plan" data-cta-kind="internal_hub" data-slot="hero_note_hub">防犯アイテム比較を見る</a> から次の一手を選べます。</p>
     <div class="meta" aria-label="主な特徴">
       <span class="tag">完全無料</span>
       <span class="tag">アプリ不要</span>
@@ -262,17 +262,17 @@
         <article class="funnel-item">
           <h3>玄関対応を強化したい</h3>
           <p>賃貸でも導入しやすいスマートドアホンを比較して、録画・通知・置き配対応をまとめて確認できます。</p>
-          <a class="btn" href="./recommend-intercom">スマートドアホン比較を見る</a>
+          <a class="btn" href="./recommend-intercom" data-cta-kind="internal_compare" data-slot="home_funnel_intercom">スマートドアホン比較を見る</a>
         </article>
         <article class="funnel-item">
           <h3>持ち歩きの不安を減らしたい</h3>
           <p>夜道・通勤・帰宅時に備えるなら、防犯ブザーの選び方とおすすめの方向性から整理するのが近道です。</p>
-          <a class="btn" href="./recommend-buzzer">防犯ブザー比較を見る</a>
+          <a class="btn" href="./recommend-buzzer" data-cta-kind="internal_compare" data-slot="home_funnel_buzzer">防犯ブザー比較を見る</a>
         </article>
         <article class="funnel-item">
           <h3>何を買うべきか迷う</h3>
           <p>音声だけで続けるか、ドアホンを足すか、ブザーを先に持つかを目的別にまとめた比較ページです。</p>
-          <a class="btn" href="./safety-plan">防犯アイテム比較を見る</a>
+          <a class="btn" href="./safety-plan" data-cta-kind="internal_hub" data-slot="home_funnel_hub">防犯アイテム比較を見る</a>
         </article>
       </div>
       <div class="callout">商品リンクを直接押す前に比較ページを1枚挟むと、自分に合わない対策を買ってしまう失敗を減らせます。</div>
@@ -616,7 +616,7 @@
         <li><a href="./recommend-intercom">スマートドアホンの選び方｜インターホン対応を短く</a></li>
         <li><a href="./recommend-buzzer">防犯ブザー・防犯グッズの選び方｜一人暮らし向け</a></li>
       </ul>
-      <p class="note">今すぐ買うより、まずは <a href="./safety-plan">比較ページを見る</a> で「玄関対策」「持ち歩き対策」「無料運用の継続」のどれを優先するかを決めるのがおすすめです。</p>
+      <p class="note">今すぐ買うより、まずは <a href="./safety-plan" data-cta-kind="internal_hub" data-slot="page_end_hub">比較ページを見る</a> で「玄関対策」「持ち歩き対策」「無料運用の継続」のどれを優先するかを決めるのがおすすめです。</p>
     </section>
 
     <section class="card subtle">
@@ -635,6 +635,7 @@
   </footer>
 
   <script src="./app.js"></script>
+  <script src="/assets/monetization.js" defer></script>
   <script src="/assets/affiliate.js" defer></script>
 </body>
 </html>

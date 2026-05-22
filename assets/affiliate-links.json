@@ -1,5 +1,41 @@
 {
-  "rakuten_doorphone_primary": "https://a.r10.to/hkx0UH",
-  "rakuten_buzzer_primary": "https://a.r10.to/hFtdXV",
-  "rakuten_buzzer_design": "https://a.r10.to/h5AGFu"
+  "rakuten_doorphone_primary": {
+    "label": "スマートドアホン",
+    "network": "rakuten",
+    "status": "ok",
+    "url": "https://a.r10.to/hkx0UH",
+    "primaryUrl": "https://a.r10.to/hkx0UH",
+    "fallbackUrl": "https://search.rakuten.co.jp/search/mall/%E3%83%AF%E3%82%A4%E3%83%A4%E3%83%AC%E3%82%B9%20%E3%83%89%E3%82%A2%E3%83%9B%E3%83%B3%20%E5%B7%A5%E4%BA%8B%E4%B8%8D%E8%A6%81/",
+    "unavailablePatterns": [
+      "売り切れ",
+      "在庫なし",
+      "販売終了"
+    ]
+  },
+  "rakuten_buzzer_primary": {
+    "label": "防犯ブザー",
+    "network": "rakuten",
+    "status": "using_fallback",
+    "url": "https://search.rakuten.co.jp/search/mall/%E9%98%B2%E7%8A%AF%20%E3%83%96%E3%82%B6%E3%83%BC%20%E5%A4%A7%E9%9F%B3%E9%87%8F/",
+    "primaryUrl": "https://a.r10.to/hFtdXV",
+    "fallbackUrl": "https://search.rakuten.co.jp/search/mall/%E9%98%B2%E7%8A%AF%20%E3%83%96%E3%82%B6%E3%83%BC%20%E5%A4%A7%E9%9F%B3%E9%87%8F/",
+    "unavailablePatterns": [
+      "売り切れ",
+      "在庫なし",
+      "販売終了"
+    ]
+  },
+  "rakuten_buzzer_design": {
+    "label": "防犯ブザー（デザイン）",
+    "network": "rakuten",
+    "status": "ok",
+    "url": "https://a.r10.to/h5AGFu",
+    "primaryUrl": "https://a.r10.to/h5AGFu",
+    "fallbackUrl": "https://search.rakuten.co.jp/search/mall/%E9%98%B2%E7%8A%AF%20%E3%83%96%E3%82%B6%E3%83%BC%20%E3%81%8B%E3%82%8F%E3%81%84%E3%81%84/",
+    "unavailablePatterns": [
+      "売り切れ",
+      "在庫なし",
+      "販売終了"
+    ]
+  }
 }

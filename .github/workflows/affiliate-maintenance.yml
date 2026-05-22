@@ -1,0 +1,41 @@
+name: Affiliate Maintenance
+
+on:
+  schedule:
+    - cron: '17 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  affiliate-maintenance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check affiliate links
+        run: node scripts/check-affiliates.mjs --write
+
+      - name: Publish report to workflow summary
+        run: cat reports/affiliate-health.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit config changes
+        run: |
+          if git diff --quiet -- assets/affiliate-links.json; then
+            echo "No affiliate config changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/affiliate-links.json
+          git commit -m "chore: refresh affiliate link status"
+          git push
