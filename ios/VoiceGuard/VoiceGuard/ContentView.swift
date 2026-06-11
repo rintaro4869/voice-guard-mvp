@@ -36,6 +36,12 @@ struct ContentView: View {
             .sheet(isPresented: $showGuide) {
                 GuideView()
             }
+            .onAppear {
+                // スクリーンショット撮影用の起動オプション
+                if ProcessInfo.processInfo.arguments.contains("-vgShowGuide") {
+                    showGuide = true
+                }
+            }
             .overlay { countdownOverlay }
         }
     }
