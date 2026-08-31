@@ -28,6 +28,6 @@ assets/audio/
 - `haai`: 「はーい」
 - `arigatou`: 「ありがとうございます」
 - `okidoki`: 「玄関の前に置いといてください」
-- `shoushou`: 「少し待ってください」
+- `shoushou`: 「少々お待ちください」
 
 必要に応じて `app.js` 内の `phrases` と `voices` を編集すると、セリフ数・声タイプ数の増減ができます。

@@ -9,7 +9,7 @@ struct Phrase: Identifiable, Equatable {
         Phrase(id: "haai", label: "はーい"),
         Phrase(id: "arigatou", label: "ありがとうございます"),
         Phrase(id: "okidoki", label: "玄関の前に置いといてください"),
-        Phrase(id: "shoushou", label: "少し待ってください")
+        Phrase(id: "shoushou", label: "少々お待ちください")
     ]
 
     static func find(_ id: String) -> Phrase {

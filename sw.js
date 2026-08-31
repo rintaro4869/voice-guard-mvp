@@ -1,4 +1,4 @@
-const CACHE_NAME = "voiceguard-static-v1";
+const CACHE_NAME = "voiceguard-static-v3";
 
 const CORE_ASSETS = [
   "/",
@@ -50,14 +50,18 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (event.request.mode === "navigate") {
+    const cacheKey = requestUrl.pathname === "/" ? "/index.html" : requestUrl.pathname;
+
     event.respondWith(
       fetch(event.request)
         .then((response) => {
           const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put("/index.html", responseClone));
+          caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, responseClone));
           return response;
         })
-        .catch(() => caches.match("/index.html"))
+        .catch(() =>
+          caches.match(cacheKey).then((cachedResponse) => cachedResponse || caches.match("/index.html"))
+        )
     );
     return;
   }

@@ -49,10 +49,16 @@ final class SoundPlayer: NSObject, ObservableObject {
             let player = try AVAudioPlayer(contentsOf: url)
             player.delegate = self
             self.player = player
-            player.play()
+            player.prepareToPlay()
+            guard player.play() else {
+                errorText = "再生を開始できませんでした。もう一度タップしてください。"
+                self.player = nil
+                return
+            }
             isPlaying = true
             statusText = "再生中：\(phrase.label)（\(resolved.label)）"
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            UIAccessibility.post(notification: .announcement, argument: "\(phrase.label)を再生中")
         } catch {
             errorText = "再生に失敗しました。もう一度タップしてください。"
             isPlaying = false
@@ -92,6 +98,7 @@ final class SoundPlayer: NSObject, ObservableObject {
             isPlaying = false
             if !silently {
                 statusText = "停止しました"
+                UIAccessibility.post(notification: .announcement, argument: "再生を停止しました")
             }
         }
     }

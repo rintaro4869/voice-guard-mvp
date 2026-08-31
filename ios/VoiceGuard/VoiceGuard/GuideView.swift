@@ -2,6 +2,8 @@ import SwiftUI
 
 struct GuideView: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var isShowingPhraseRequest = false
+    @State private var isShowingMailUnavailable = false
 
     var body: some View {
         NavigationStack {
@@ -24,6 +26,22 @@ struct GuideView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                Section("追加してほしいセリフ") {
+                    Button {
+                        if MailComposeView.canSendMail {
+                            isShowingPhraseRequest = true
+                        } else {
+                            isShowingMailUnavailable = true
+                        }
+                    } label: {
+                        Label("アプリ内からリクエスト", systemImage: "text.bubble")
+                    }
+
+                    Text("ご要望の集約専用です。本文に氏名などを書く必要はなく、個別の返信は行っていません。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("リンク") {
                     Link(destination: URL(string: "https://voiceguardhitoribouhan.pages.dev/")!) {
                         Label("公式サイト・防犯コラム", systemImage: "globe")
@@ -41,6 +59,25 @@ struct GuideView: View {
                         dismiss()
                     }
                 }
+            }
+            .sheet(isPresented: $isShowingPhraseRequest) {
+                MailComposeView(
+                    recipients: ["rintaro4869@gmail.com"],
+                    subject: "ひとり防犯ボイス：追加セリフのリクエスト",
+                    body: """
+                    追加してほしいセリフ：
+
+                    使いたい場面：
+
+                    ※ご要望の集約専用です。個別の返信は行っていません。
+                    ※氏名・住所などの個人情報は記載しないでください。
+                    """
+                )
+            }
+            .alert("メールを送信できません", isPresented: $isShowingMailUnavailable) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("iPhoneの「設定」でメールアカウントを追加してから、もう一度お試しください。")
             }
         }
     }

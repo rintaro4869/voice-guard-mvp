@@ -59,9 +59,9 @@
       ]
     },
     {
-      "name": "少し待ってもらう",
-      "short_name": "少し待って",
-      "description": "少し待ってくださいの音声ですぐ開きます",
+      "name": "少々お待ちください",
+      "short_name": "少々お待ち",
+      "description": "少々お待ちくださいの音声ですぐ開きます",
       "url": "/?source=shortcut&phrase=shoushou&voice=young_polite",
       "icons": [
         {

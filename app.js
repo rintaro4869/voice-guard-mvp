@@ -3,13 +3,13 @@ const phrases = [
   { id: "haai", label: "はーい" },
   { id: "arigatou", label: "ありがとうございます" },
   { id: "okidoki", label: "玄関の前に置いといてください" },
-  { id: "shoushou", label: "少し待ってください" }
+  { id: "shoushou", label: "少々お待ちください" }
 ];
 
 const voices = [
-  { id: "young_polite", label: "若めの声（丁寧）" },
-  { id: "young_blunt", label: "若めの声（少し素っ気ない）" },
-  { id: "random", label: "おまかせ" }
+  { id: "young_polite", label: "若めの声（丁寧）", description: "落ち着いた返答・置き配のお願いに" },
+  { id: "young_blunt", label: "若めの声（少し素っ気ない）", description: "短くはっきり返したいときに" },
+  { id: "random", label: "おまかせ", description: "2種類の声から自動で選びます" }
 ];
 
 const STORAGE_KEYS = {
@@ -78,10 +78,20 @@ function renderOptions(container, items, selectedId, map, onSelect) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "option-btn";
-    btn.textContent = item.label;
+    const label = document.createElement("span");
+    label.className = "option-label";
+    label.textContent = item.label;
+    btn.appendChild(label);
+    if (item.description) {
+      const description = document.createElement("span");
+      description.className = "option-description";
+      description.textContent = item.description;
+      btn.appendChild(description);
+    }
     if (item.id === selectedId) {
       btn.classList.add("selected");
     }
+    btn.setAttribute("aria-pressed", item.id === selectedId ? "true" : "false");
     btn.addEventListener("click", () => onSelect(item.id));
     container.appendChild(btn);
     map.set(item.id, btn);
@@ -162,6 +172,7 @@ function selectVoice(id) {
 function updateSelected(map, selectedId) {
   map.forEach((btn, id) => {
     btn.classList.toggle("selected", id === selectedId);
+    btn.setAttribute("aria-pressed", id === selectedId ? "true" : "false");
   });
 }
 
@@ -237,7 +248,7 @@ function getAudio(voiceId, phraseId) {
   return audio;
 }
 
-async function handlePlay(source = "unknown") {
+async function handlePlay(playSource = "unknown") {
   clearError();
   const phrase = phrases.find((p) => p.id === state.phraseId);
   const voiceId = getEffectiveVoiceId();
@@ -252,7 +263,7 @@ async function handlePlay(source = "unknown") {
   state.currentAudio = audio;
   updateStatus(`再生中: ${label}`);
   trackEvent("play_audio", {
-    source,
+    play_source: playSource,
     phrase_id: state.phraseId,
     phrase_label: phrase?.label,
     voice_id: voiceId,
@@ -264,7 +275,7 @@ async function handlePlay(source = "unknown") {
   } catch (error) {
     showError("再生に失敗しました。もう一度タップしてください。");
     trackEvent("audio_play_error", {
-      source,
+      play_source: playSource,
       phrase_id: state.phraseId,
       voice_id: voiceId
     });
@@ -514,17 +525,17 @@ function isValidVoiceId(id) {
 }
 
 function announceLaunchContext() {
-  const source = launchParams.source || "direct";
+  const launchSource = launchParams.source || "direct";
   const displayMode = window.matchMedia("(display-mode: standalone)").matches ? "standalone" : "browser";
 
-  if (source === "shortcut") {
+  if (launchSource === "shortcut") {
     updateStatus("ショートカットから起動しました。再生ボタンを押すとすぐ使えます。");
-  } else if (source === "a2hs" && displayMode === "standalone") {
+  } else if (launchSource === "a2hs" && displayMode === "standalone") {
     updateStatus("ホーム画面から起動しました。再生ボタンを押すとすぐ使えます。");
   }
 
   trackEvent("launch_app", {
-    source,
+    launch_source: launchSource,
     display_mode: displayMode,
     phrase_id: state.phraseId,
     voice_id: state.voiceId

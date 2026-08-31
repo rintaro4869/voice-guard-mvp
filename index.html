@@ -34,7 +34,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap" rel="stylesheet" />
 
   <script type="application/ld+json">
   {
@@ -48,6 +48,8 @@
     "inLanguage": "ja",
     "isAccessibleForFree": true,
     "url": "https://voiceguardhitoribouhan.pages.dev/",
+    "downloadUrl": "https://apps.apple.com/jp/app/id6803588933",
+    "appVersion": "1.0.0",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -82,7 +84,7 @@
         "name": "インターホン対応で男性の声が必要なときに使えますか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "はい。「はい」「はーい」「ありがとうございます」「少し待ってください」など、インターホン対応で使いやすい短い定型フレーズを用意しています。"
+          "text": "はい。「はい」「はーい」「ありがとうございます」「少々お待ちください」など、インターホン対応で使いやすい短い定型フレーズを用意しています。"
         }
       },
       {
@@ -122,7 +124,7 @@
         "name": "iPhoneアプリ版とWeb版の違いは何ですか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Web版は今すぐ無料で使えます。準備中のiPhoneアプリ版では、端末内の音声、オフライン利用、遅延再生など、玄関先でより使いやすくする機能を重視する予定です。"
+          "text": "Web版は今すぐ無料で使えます。公開中のiPhoneアプリ版では、端末内の音声、オフライン利用、マナーモード中の再生、3秒後の再生に対応しています。"
         }
       },
       {
@@ -170,7 +172,15 @@
         "name": "個人情報は収集されますか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "一切収集しません。音声の選択状態はお使いの端末のブラウザ内にのみ保存され、外部に送信されることはありません。"
+          "text": "氏名・メールアドレスなどの個人情報は収集しません。なお、Webサイトではサービス改善のため、Google Analyticsで匿名の利用状況を計測しています。音声の選択状態はお使いの端末のブラウザ内にも保存されます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "このサイトだけで防犯は十分ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "本サイトは配達対応やインターホン応答の不安を軽くする補助ツールです。身の危険を感じる場合は無理に応答せず、110番通報や管理会社への相談を優先してください。"
         }
       },
       {
@@ -243,6 +253,13 @@
   <div class="ambient"></div>
   <header class="hero">
     <div class="badge">配達対応の不安を、ワンタップで軽くする</div>
+    <div class="release-banner">
+      <div class="release-copy">
+        <span class="release-kicker">iPhoneアプリ版 公開中</span>
+        <strong>オフライン・マナーモードでも使えます</strong>
+      </div>
+      <a class="btn app-store-btn" href="https://apps.apple.com/jp/app/id6803588933" target="_blank" rel="noopener noreferrer" data-cta-kind="app_store" data-slot="hero_app_store">App Storeで無料</a>
+    </div>
     <h1>インターホン 男性の声 アプリ・サイト（無料）</h1>
     <p>ひとり防犯ボイス ── 置き配やインターホン対応で使える男性音声をワンタップ再生。<br />スマホのブラウザですぐ使える、配達対応・一人暮らしの防犯向けの無料Webアプリ・サイトです。</p>
     <div class="hero-actions">
@@ -251,7 +268,7 @@
     </div>
     <p class="note">※再生はユーザー操作が必要です。インターホンが鳴ったらこのボタンをタップ。</p>
     <p class="note">無料で使いながら玄関対策も強化したい方は、<a href="./safety-plan" data-cta-kind="internal_hub" data-slot="hero_note_hub">防犯アイテム比較を見る</a> から次の一手を選べます。</p>
-    <p class="note">iPhoneアプリ版も公開準備中です。今すぐ使う場合は、このWeb版をホーム画面に追加してください。</p>
+    <p class="note">今すぐ試すならWeb版、電波が不安な場所やマナーモード中は <a href="https://apps.apple.com/jp/app/id6803588933" target="_blank" rel="noopener noreferrer" data-cta-kind="app_store" data-slot="hero_app_store_note">iPhoneアプリ版</a> が便利です。</p>
     <div class="meta" aria-label="主な特徴">
       <span class="tag">完全無料</span>
       <span class="tag">アプリ不要</span>
@@ -266,11 +283,18 @@
         <h2>1. 音量チェック</h2>
         <p class="sub">音量は端末の物理ボタンで調整してください。</p>
       </div>
+      <div class="volume-guide">
+        <span class="volume-guide-icon" aria-hidden="true">🔊</span>
+        <div>
+          <strong>まずは聞こえ方を確認</strong>
+          <p>スマホの音量を少し大きめにして、再生ボタンでインターホンに届くか試します。</p>
+        </div>
+      </div>
     </section>
 
     <section class="card">
       <div class="card-head">
-        <h2>1.5 迷ったらここから選ぶ</h2>
+        <h2>準備ができたら、シーンから選ぶ</h2>
         <p class="sub">よく使うシーンに合わせて、おすすめのセリフと声をすぐセットできます。</p>
       </div>
       <div id="scenarioPresets" class="preset-grid">
@@ -284,7 +308,7 @@
         </button>
         <button class="preset-card" type="button" data-scenario="need_a_moment" data-phrase="shoushou" data-voice="young_polite">
           <strong>少し待ってほしい</strong>
-          <span>「少し待ってください」+ 若めの声（丁寧）</span>
+          <span>「少々お待ちください」+ 若めの声（丁寧）</span>
         </button>
       </div>
       <p class="note">初めて使う方は、ここから選んでから再生すると迷いにくいです。</p>
@@ -303,7 +327,7 @@
         <h2>3. 男性の声タイプを選ぶ</h2>
         <p class="sub">「おまかせ」はページを開いた時に1つ自動で選び、開き直すまで同じ声を使います。</p>
       </div>
-      <div id="voiceOptions" class="options"></div>
+      <div id="voiceOptions" class="options voice-options"></div>
       <p id="randomHint" class="note"></p>
     </section>
 
@@ -331,22 +355,31 @@
       <p class="note">迷ったら「置き配をお願いしたい」を選んでから、この再生ボタンを押してください。</p>
     </section>
 
-    <section class="card article">
-      <h2>iPhoneアプリ版も公開準備中です</h2>
-      <p>今すぐ使うならWeb版で十分です。iPhoneアプリ版では、音声を端末内に入れてオフラインでも使えること、マナーモード中でも再生しやすいこと、3秒後に再生してインターホンに近づけてから鳴らせることを重視しています。</p>
+    <section class="card article app-bridge-card">
+      <div class="section-eyebrow">使い分けガイド</div>
+      <h2>Web版とiPhoneアプリ版、どちらも無料で使えます</h2>
+      <p>今すぐ試すならWeb版。配達前にホーム画面へ追加しておけば、アプリのように起動できます。電波が不安な場所やマナーモード中も使いたい場合は、iPhoneアプリ版が向いています。</p>
       <div class="funnel-grid">
         <article class="funnel-item">
-          <h3>今すぐ使う</h3>
-          <p>配達予定がある日は、Web版をホーム画面に追加しておくと最短で起動できます。</p>
+          <div class="funnel-kicker">ブラウザですぐ</div>
+          <h3>Web版を使う</h3>
+          <p>登録・インストール不要。検索から来た今、そのまま男性音声を再生できます。</p>
           <a class="btn" href="#installSection">ホーム画面に追加する</a>
         </article>
         <article class="funnel-item">
-          <h3>iPhoneでの使い方を見る</h3>
-          <p>Safariでの使い方、ホーム画面追加、アプリ版との違いをまとめています。</p>
+          <div class="funnel-kicker">iPhone向け</div>
+          <h3>アプリ版を使う</h3>
+          <p>端末内の音声、オフライン再生、マナーモード中の再生、3秒後再生に対応しています。</p>
+          <a class="btn primary" href="https://apps.apple.com/jp/app/id6803588933" target="_blank" rel="noopener noreferrer" data-cta-kind="app_store" data-slot="home_app_store">App Storeで無料ダウンロード</a>
+        </article>
+        <article class="funnel-item">
+          <div class="funnel-kicker">詳しく知る</div>
+          <h3>違いを確認する</h3>
+          <p>Safariでの使い方、ホーム画面追加、Web版とアプリ版の違いをまとめています。</p>
           <a class="btn" href="./ios-intercom-voice" data-cta-kind="internal_app" data-slot="home_ios_app_guide">iPhone対応ガイドを見る</a>
         </article>
       </div>
-      <p class="note">App Store公開後は、このサイトのiPhone導線から案内します。無料で使える体験は維持します。</p>
+      <p class="note">Web版で試してから、必要に応じてアプリ版へ移れます。どちらも無料・ログイン不要です。</p>
     </section>
 
     <section class="card article">
@@ -530,7 +563,7 @@
         <p>ひとり防犯ボイスは、配達対応やインターホン応答の場面で使える<strong>男性音声をワンタップで再生できる無料のWebアプリ・サイト</strong>です。アプリのインストールは不要で、スマートフォンのブラウザからすぐに使えます。</p>
         <h3>主な特徴</h3>
         <ul>
-          <li><strong>配達対応に特化した5つのフレーズ</strong> ── 「はい」「はーい」「ありがとうございます」「玄関の前に置いといてください」「少し待ってください」。日常の配達シーンで実際に使う短い言葉だけに厳選しました。</li>
+          <li><strong>配達対応に特化した5つのフレーズ</strong> ── 「はい」「はーい」「ありがとうございます」「玄関の前に置いといてください」「少々お待ちください」。日常の配達シーンで実際に使う短い言葉だけに厳選しました。</li>
           <li><strong>2種類の声タイプ＋おまかせ機能</strong> ── 若めの男性音声を「丁寧」と「少し素っ気ない」の2パターンで用意。「おまかせ」を選ぶとランダムに切り替わるので、同じ配達員にも毎回違う印象を与えられます。</li>
           <li><strong>ワンタップ再生</strong> ── インターホンが鳴ったらボタンを1回タップするだけ。操作に迷う時間がありません。</li>
           <li><strong>完全無料・登録不要</strong> ── ブラウザで開くだけで使えます。個人情報の入力やアカウント作成は一切不要です。</li>
@@ -567,7 +600,7 @@
         <h3>知らない訪問者（セールス・勧誘）への対応</h3>
         <p>予定のない訪問者がインターホンを押してきたとき、男性の声で「はい」と応答するだけで、相手に「男性が在宅している」と印象づけられます。それ以上の対話をせずに済むため、しつこい勧誘を断りやすくなります。</p>
         <h3>夜間や深夜の急な訪問</h3>
-        <p>夜間にインターホンが鳴ったとき、自分の声で応答するのは特に不安が大きいものです。男性音声で「少し待ってください」と対応することで、相手に男性の存在を印象づけつつ、状況を確認する時間を確保できます。</p>
+        <p>夜間にインターホンが鳴ったとき、自分の声で応答するのは特に不安が大きいものです。男性音声で「少々お待ちください」と対応することで、相手に男性の存在を印象づけつつ、状況を確認する時間を確保できます。</p>
       </div>
     </section>
 
@@ -670,7 +703,7 @@
         <h3>置き配のお願いに男性音声を使えますか？</h3>
         <p>はい。「玄関の前に置いといてください」をワンタップで再生できます。インターホン越しに自然な男性の声で置き配をお願いできるので、対面の必要がありません。</p>
         <h3>インターホン対応で男性の声が必要なときに使えますか？</h3>
-        <p>はい。「はい」「はーい」「ありがとうございます」「少し待ってください」など、インターホン対応で使いやすい短い定型フレーズを用意しています。</p>
+        <p>はい。「はい」「はーい」「ありがとうございます」「少々お待ちください」など、インターホン対応で使いやすい短い定型フレーズを用意しています。</p>
         <h3>インターホン男性の声サイトを探しています。アプリのインストールは必要ですか？</h3>
         <p>不要です。ブラウザで開いて使える無料サイトなので、インストールなしでそのまま使えます。ホーム画面に追加すればアプリのようにも起動できます。</p>
         <h3>インターホン男の声アプリとして使えますか？</h3>
@@ -680,7 +713,7 @@
         <h3>ブラウザで開くサイトでもインターホン対応に間に合いますか？</h3>
         <p>配達予定がある日は事前にページを開き、よく使うセリフを選んでおくと間に合いやすくなります。ホーム画面に追加しておけば、アプリのようにすぐ起動できます。</p>
         <h3>iPhoneアプリ版とWeb版の違いは何ですか？</h3>
-        <p>Web版は今すぐ無料で使えます。準備中のiPhoneアプリ版では、端末内の音声、オフライン利用、遅延再生など、玄関先でより使いやすくする機能を重視する予定です。</p>
+        <p>Web版は今すぐ無料で使えます。公開中のiPhoneアプリ版では、端末内の音声、オフライン利用、マナーモード中の再生、3秒後の再生に対応しています。</p>
         <h3>男の声で防犯したいときに使えますか？</h3>
         <p>はい。男の声で応答することで、訪問者に男性が在宅している印象を与えやすくなります。置き配や短い返答を、自分の声を出さずに行いたいときに向いています。</p>
         <h3>男性音声は機械音声ですか？</h3>
@@ -694,7 +727,7 @@
         <h3>オフラインでも使えますか？</h3>
         <p>初回アクセス時に音声ファイルが読み込まれるため、一度開いたページであればオフラインでも再生可能です。</p>
         <h3>個人情報は収集されますか？</h3>
-        <p>一切収集しません。音声の選択状態はお使いの端末のブラウザ内にのみ保存され、外部に送信されることはありません。</p>
+        <p>氏名・メールアドレスなどの個人情報は収集しません。なお、Webサイトではサービス改善のため、Google Analyticsで匿名の利用状況を計測しています。音声の選択状態はお使いの端末のブラウザ内にも保存されます。</p>
         <h3>このサイトだけで防犯は十分ですか？</h3>
         <p>本サイトは配達対応やインターホン応答の不安を軽くする補助ツールです。身の危険を感じる場合は無理に応答せず、110番通報や管理会社への相談を優先してください。</p>
       </div>
@@ -761,7 +794,8 @@
   </main>
 
   <footer class="footer">
-    <p>ひとり防犯ボイス MVP</p>
+    <p>ひとり防犯ボイス Web版</p>
+    <p><a href="https://apps.apple.com/jp/app/id6803588933" target="_blank" rel="noopener noreferrer" data-cta-kind="app_store" data-slot="footer_app_store">iPhoneアプリ版をApp Storeで見る</a></p>
     <p><a href="./disclosure">広告掲載・アフィリエイト開示</a></p>
   </footer>
 

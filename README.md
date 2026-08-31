@@ -29,6 +29,7 @@ node scripts/check-affiliates.mjs
 - 2026-05-22 時点の収益化見直し方針: `docs/monetization-strategy-reset-20260522.md`
 - 国内外のリサーチ込みの戦略書: `docs/global-monetization-strategy-20260522.md`
 - 実行タスクの優先順: `docs/execution-roadmap-20260523.md`
+- 2026-06-21 時点のSEO・iOSアプリ・収益化統合方針: `docs/growth-strategy-20260621.md`
 
 ## 音声ファイルの配置
 
