@@ -2,8 +2,8 @@
   "rakuten_doorphone_primary": {
     "label": "スマートドアホン",
     "network": "rakuten",
-    "status": "ok",
-    "url": "https://a.r10.to/hkx0UH",
+    "status": "using_fallback",
+    "url": "https://search.rakuten.co.jp/search/mall/%E3%83%AF%E3%82%A4%E3%83%A4%E3%83%AC%E3%82%B9%20%E3%83%89%E3%82%A2%E3%83%9B%E3%83%B3%20%E5%B7%A5%E4%BA%8B%E4%B8%8D%E8%A6%81/",
     "primaryUrl": "https://a.r10.to/hkx0UH",
     "fallbackUrl": "https://search.rakuten.co.jp/search/mall/%E3%83%AF%E3%82%A4%E3%83%A4%E3%83%AC%E3%82%B9%20%E3%83%89%E3%82%A2%E3%83%9B%E3%83%B3%20%E5%B7%A5%E4%BA%8B%E4%B8%8D%E8%A6%81/",
     "unavailablePatterns": [
