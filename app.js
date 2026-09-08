@@ -42,11 +42,16 @@ const playBtn = document.getElementById("playBtn");
 const stopBtn = document.getElementById("stopBtn");
 const playBtnTop = document.getElementById("playBtnTop");
 const stopBtnTop = document.getElementById("stopBtnTop");
+const postPlayAppPromo = document.getElementById("postPlayAppPromo");
+const dismissPostPlayAppPromo = document.getElementById("dismissPostPlayAppPromo");
 
 const phraseButtons = new Map();
 const voiceButtons = new Map();
 const audioCache = new Map();
 const trackedScrollMilestones = new Set();
+const trackedAppPromoSlots = new Set();
+const deviceType = getDeviceType();
+let postPlayPromoShown = false;
 
 renderPhraseOptions();
 renderOptions(voiceOptions, voices, state.voiceId, voiceButtons, selectVoice);
@@ -60,6 +65,7 @@ primeAudio();
 setupInstallPrompt();
 setupScenarioPresets();
 setupAnalytics();
+setupAppPromotion();
 announceLaunchContext();
 registerServiceWorker();
 
@@ -291,6 +297,7 @@ async function handlePlay(playSource = "unknown") {
         voice_id: voiceId,
         voice_label: voice?.label
       });
+      showPostPlayAppPromo();
     }
   };
 }
@@ -400,6 +407,75 @@ function setupAnalytics() {
   window.addEventListener("scroll", trackScrollDepth, { passive: true });
 }
 
+function setupAppPromotion() {
+  document.body.classList.add(`is-${deviceType}`);
+
+  if (deviceType === "android") {
+    return;
+  }
+
+  const promoElements = document.querySelectorAll("[data-app-promo-slot]");
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.35) {
+            return;
+          }
+          trackAppPromoView(entry.target);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: [0.35] }
+    );
+    promoElements.forEach((element) => observer.observe(element));
+  } else {
+    promoElements.forEach(trackAppPromoView);
+  }
+
+  if (dismissPostPlayAppPromo) {
+    dismissPostPlayAppPromo.addEventListener("click", () => {
+      postPlayAppPromo.hidden = true;
+      persistSessionValue("vg_post_play_promo_dismissed", "1");
+      trackEvent("app_store_cta_dismiss", {
+        slot: "post_play_app_store",
+        device_type: deviceType
+      });
+    });
+  }
+}
+
+function showPostPlayAppPromo() {
+  if (
+    deviceType !== "ios" ||
+    !postPlayAppPromo ||
+    postPlayPromoShown ||
+    loadSessionValue("vg_post_play_promo_dismissed") === "1"
+  ) {
+    return;
+  }
+
+  postPlayPromoShown = true;
+  postPlayAppPromo.hidden = false;
+}
+
+function trackAppPromoView(element) {
+  if (element.hidden) {
+    return;
+  }
+
+  const slot = element.dataset.appPromoSlot || "unknown";
+  if (trackedAppPromoSlots.has(slot)) {
+    return;
+  }
+
+  trackedAppPromoSlots.add(slot);
+  trackEvent("app_store_cta_view", {
+    slot,
+    device_type: deviceType
+  });
+}
+
 function scrollToPrimaryControls() {
   if (!mainPlayCard) {
     return;
@@ -431,6 +507,13 @@ function trackLinkClick(event) {
       link_label: label
     });
     return;
+  }
+
+  if (url.host === "apps.apple.com" && anchor.dataset.ctaKind === "app_store") {
+    trackEvent("app_store_cta_click", {
+      slot: anchor.dataset.slot || "unknown",
+      device_type: deviceType
+    });
   }
 
   trackEvent("outbound_link_click", {
@@ -483,6 +566,36 @@ function persist(key, value) {
   } catch (error) {
     // localStorage unavailable
   }
+}
+
+function loadSessionValue(key) {
+  try {
+    return sessionStorage.getItem(key);
+  } catch (error) {
+    return null;
+  }
+}
+
+function persistSessionValue(key, value) {
+  try {
+    sessionStorage.setItem(key, value);
+  } catch (error) {
+    // sessionStorage unavailable
+  }
+}
+
+function getDeviceType() {
+  const isIOS =
+    /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+  if (isIOS) {
+    return "ios";
+  }
+  if (/android/i.test(navigator.userAgent)) {
+    return "android";
+  }
+  return "desktop";
 }
 
 function getInitialPhraseId() {

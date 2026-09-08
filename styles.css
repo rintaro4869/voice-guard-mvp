@@ -114,7 +114,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  max-width: 620px;
+  max-width: 760px;
   margin: 18px auto 20px;
   padding: 12px 14px 12px 16px;
   border: 1px solid rgba(42, 157, 143, 0.22);
@@ -122,6 +122,14 @@ body {
   background: rgba(255, 255, 255, 0.78);
   box-shadow: 0 12px 28px rgba(28, 31, 42, 0.1);
   text-align: left;
+}
+
+.release-app-icon {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  box-shadow: 0 10px 20px rgba(28, 31, 42, 0.14);
 }
 
 .release-copy {
@@ -144,6 +152,12 @@ body {
   line-height: 1.4;
 }
 
+.release-benefits {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .app-store-btn {
   flex: 0 0 auto;
   padding: 10px 14px;
@@ -153,17 +167,24 @@ body {
   white-space: nowrap;
 }
 
+body.is-android [data-ios-promo] {
+  display: none !important;
+}
+
 .container {
   position: relative;
   z-index: 1;
+  width: 100%;
   max-width: 900px;
   margin: 0 auto 60px;
   padding: 0 20px 40px;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
 }
 
 .card {
+  min-width: 0;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -598,6 +619,115 @@ body {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(42, 157, 143, 0.08));
 }
 
+.app-bridge-main {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.app-bridge-copy {
+  min-width: 0;
+}
+
+.app-bridge-icon,
+.post-play-app-icon {
+  border-radius: 20px;
+  box-shadow: 0 14px 28px rgba(28, 31, 42, 0.16);
+}
+
+.app-bridge-copy h2 {
+  margin-top: 0;
+}
+
+.app-benefit-list {
+  grid-column: 2;
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.app-benefit-list li {
+  position: relative;
+  padding-left: 24px;
+  color: var(--ink);
+}
+
+.app-benefit-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+.app-bridge-cta {
+  grid-column: 2;
+  color: #fff !important;
+}
+
+.app-bridge-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.post-play-app-promo {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 20px;
+  border: 2px solid rgba(42, 157, 143, 0.34);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff, #e9faf6);
+  box-shadow: var(--shadow);
+  animation: fadeUp 0.45s ease both;
+}
+
+.post-play-app-promo[hidden] {
+  display: none;
+}
+
+.post-play-app-copy h2 {
+  margin: 2px 0 6px;
+  font-size: 20px;
+}
+
+.post-play-app-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.post-play-app-actions {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.text-button {
+  border: 0;
+  padding: 4px 8px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.text-button:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
 .section-eyebrow {
   margin-bottom: 6px;
 }
@@ -736,12 +866,70 @@ body {
 
 @media (max-width: 560px) {
   .release-banner {
-    align-items: stretch;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    align-items: center;
     gap: 10px;
+    padding: 12px;
+  }
+
+  .release-app-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 13px;
   }
 
   .app-store-btn {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .app-bridge-main {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .app-bridge-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+
+  .app-bridge-cta {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .app-benefit-list {
+    grid-column: 1 / -1;
+  }
+
+  .app-bridge-secondary {
+    display: grid;
+  }
+
+  .post-play-app-promo {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .post-play-app-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 15px;
+  }
+
+  .post-play-app-copy h2 {
+    font-size: 18px;
+  }
+
+  .post-play-app-actions {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .post-play-app-actions .btn {
     width: 100%;
   }
 }
