@@ -23,6 +23,16 @@ node scripts/check-affiliates.mjs
 - `--write` を付けると、売り切れや販売終了を検知したリンクを `fallbackUrl` に切り替えます。
 - GitHub Actions の `Affiliate Maintenance` が毎日自動で実行され、必要なときだけ `assets/affiliate-links.json` を更新します。
 
+## SEO回帰チェック
+
+トップページの主力検索意図、canonical、構造化データ、FAQ重複を次のコマンドで確認できます。
+
+```bash
+node scripts/check-seo-contract.mjs
+```
+
+`index.html` または `sitemap.xml` の変更時は、GitHub Actions の `SEO Contract` でも自動実行されます。
+
 ## マネタイズ方針
 
 - 現在のアプリ/市場前提: `app-marketing-context.md`
