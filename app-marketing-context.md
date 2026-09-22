@@ -3,14 +3,14 @@
 - **App ID (Apple):** 6803588933
 - **Category:** Security / Utility
 - **Platform:** Web, iPhone Safari, Android Chrome, native iOS app
-- **Price Model:** Free web app + free iOS app at launch
+- **Price Model:** Free web app + ad-supported iOS app + one-time ad removal
 - **Launch Date:** 2026-02-07 (Web) / 2026-08-30 (iOS distribution)
-- **Current Version:** Static Web app + iOS 1.0.0 distributed / iOS 1.0.1 ASO update in preparation
+- **Current Version:** Static Web app + iOS 1.0.3 distributed / iOS 1.1.0 monetization update in preparation
 
 ## Value Proposition
 - **Problem:** 一人暮らし女性がインターホンや配達対応で自分の声を出したくない不安を、すぐに軽くしたい
 - **Target Audience:** 一人暮らし女性、特に配達対応・置き配・夜間来訪に不安がある20-30代
-- **Unique Differentiator:** 登録不要、完全無料、インストール不要、男性音声をワンタップ再生
+- **Unique Differentiator:** 登録不要、Webはインストール不要、iOSは男性音声をワンタップ再生・広告削除を買い切りで選択可能
 - **Elevator Pitch:** 配達対応の不安を、男性音声のワンタップ再生で今すぐ軽くする無料Webアプリ
 
 ## Competitors
@@ -24,8 +24,8 @@
 - **Primary Model:** 楽天アフィリエイト
 - **Current Status:** 過去90日で22クリック、売上0件、CVR 0%
 - **Current Constraint:** 来訪意図が「無料で今すぐ使う」に寄っており、購入意図とズレている
-- **Recommended App Launch Model:** iOS版は広告なし・完全無料でローンチし、信頼とレビュー獲得を優先する
-- **Ad Strategy:** AdMob/AdSenseは短期の主戦場にしない。安全・緊急用途のUXを崩しやすく、現トラフィック規模では収益インパクトが小さい
+- **Current App Model:** iOS版の基本機能は無料のまま維持し、バナー広告と約300円の買い切り広告削除を併用する
+- **Ad Strategy:** AdMobはメイン操作から離れた位置のバナーに限定し、音声再生中の全画面広告・インタースティシャル広告は使わない。初期は収益最大化より継続率と広告削除率の検証を優先する
 - **Affiliate Strategy:** Webの無料利用後に「まだ不安が残る人」だけを `safety-plan -> recommend-* -> 楽天` へ送る。無料体験の前には強く出さない
 
 ## Goals
@@ -38,8 +38,8 @@
 ## Launch & Monetization Strategy
 - **Phase 1: Web SEO moat** — 「インターホン 男性の声 アプリ 無料」系の検索流入をトップページで維持し、FAQ/専用記事で周辺クエリを拾う
 - **Phase 2: Post-use monetization** — 再生後・記事下・不安別比較ページで、スマートドアホン/防犯ブザー/無料継続の選択肢を提示する
-- **Phase 3: iOS app launch** — iOS版は無料・広告なし・データ収集なしを訴求し、Web版の信頼をApp Store初期DLとレビューに変える。Web版とアプリ版を相互リンクする
-- **Phase 4: Optional paid layer** — 課金は初期ローンチ後。追加セリフ、ウィジェット、Siriショートカット、複数音声など「緊急時の確実性」を上げる機能に限定して検討する
+- **Phase 3: iOS monetization test** — 基本機能は無料のまま、非パーソナライズ設定のバナー広告と買い切り広告削除を導入し、UXへの影響を計測する
+- **Phase 4: Expansion gate** — 広告削除率、継続率、レビューを見て次の課金機能を判断する。追加セリフ、ウィジェット、Siriショートカット、複数音声は、まず利用価値を高める候補として検証する
 
 ## SEO Ownership
 - **Primary URL:** `/`
@@ -52,7 +52,7 @@
 - **Team:** Solo
 - **Budget:** ほぼゼロ
 - **Tools:** GA4, GitHub, Cloudflare Pages, 楽天アフィリエイト
-- **Constraints:** 無料利用UXを崩せない、広告色を強くしすぎると離脱しやすい
+- **Constraints:** 無料利用UXを崩せない、緊急時の主操作を広告で妨げない、App Storeのプライバシー開示をAdMobの実態と一致させる
 
 ## Markets
 - **Primary:** Japan
