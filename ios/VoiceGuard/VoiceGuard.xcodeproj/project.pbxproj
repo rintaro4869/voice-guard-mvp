@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CC0000010000000000000000 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = CC0000030000000000000000 /* GoogleMobileAds */; };
+		CC0000020000000000000000 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = CC0000060000000000000000 /* GoogleUserMessagingPlatform */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		BB0000020000000000000000 /* VoiceGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -17,6 +22,7 @@
 				CLAUDE.md,
 				Info.plist,
 				Resources/Audio/CLAUDE.md,
+				VoiceGuard.storekit,
 			);
 			target = BB0000050000000000000000 /* VoiceGuard */;
 		};
@@ -38,6 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC0000010000000000000000 /* GoogleMobileAds in Frameworks */,
+				CC0000020000000000000000 /* GoogleUserMessagingPlatform in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +75,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB00000D0000000000000000 /* Build configuration list for PBXNativeTarget "VoiceGuard" */;
 			buildPhases = (
+				CC0000070000000000000000 /* Validate AdMob Configuration */,
 				BB0000070000000000000000 /* Sources */,
 				BB0000060000000000000000 /* Frameworks */,
 				BB0000080000000000000000 /* Resources */,
@@ -80,6 +89,8 @@
 			);
 			name = VoiceGuard;
 			packageProductDependencies = (
+				CC0000030000000000000000 /* GoogleMobileAds */,
+				CC0000060000000000000000 /* GoogleUserMessagingPlatform */,
 			);
 			productName = VoiceGuard;
 			productReference = BB0000020000000000000000 /* VoiceGuard.app */;
@@ -110,6 +121,8 @@
 			mainGroup = BB0000010000000000000000;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				CC0000040000000000000000 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				CC0000050000000000000000 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BB0000040000000000000000 /* Products */;
@@ -130,6 +143,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CC0000070000000000000000 /* Validate AdMob Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Validate AdMob Configuration";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" = \"Release\" ]; then\n  case \"$ADMOB_APP_ID:$ADMOB_BANNER_UNIT_ID\" in\n    *3940256099942544*|*REPLACE_ME*|:)\n      echo \"error: Release用のAdMob App IDとバナー広告ユニットIDを設定してください。テストIDではArchiveできません。\"\n      exit 1\n      ;;\n  esac\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BB0000070000000000000000 /* Sources */ = {
@@ -264,10 +299,12 @@
 		BB00000E0000000000000000 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ADMOB_APP_ID = "ca-app-pub-3940256099942544~1458002511";
+				ADMOB_BANNER_UNIT_ID = "ca-app-pub-3940256099942544/2435281174";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 5NM2C3PD73;
 				ENABLE_PREVIEWS = YES;
@@ -278,7 +315,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.voiceguard.hitoribouhan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -293,10 +334,12 @@
 		BB00000F0000000000000000 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ADMOB_APP_ID = "ca-app-pub-6754730240789283~7824872824";
+				ADMOB_BANNER_UNIT_ID = "ca-app-pub-6754730240789283/5203413068";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 5NM2C3PD73;
 				ENABLE_PREVIEWS = YES;
@@ -307,7 +350,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.voiceguard.hitoribouhan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -341,6 +388,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CC0000040000000000000000 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.10.0;
+			};
+		};
+		CC0000050000000000000000 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CC0000030000000000000000 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000040000000000000000 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		CC0000060000000000000000 /* GoogleUserMessagingPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC0000050000000000000000 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+			productName = GoogleUserMessagingPlatform;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BB0000090000000000000000 /* Project object */;
 }

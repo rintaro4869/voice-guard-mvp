@@ -1,0 +1,33 @@
+{
+  "identifier" : "7F2A9C41",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "300",
+      "familyShareable" : false,
+      "internalID" : "A91D6E2B",
+      "localizations" : [
+        {
+          "description" : "バナー広告を買い切りで非表示にします。音声・セリフなどの基本機能は購入前もすべて利用できます。",
+          "displayName" : "広告を削除",
+          "locale" : "ja"
+        }
+      ],
+      "productID" : "com.voiceguard.hitoribouhan.removeads",
+      "referenceName" : "広告を削除",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

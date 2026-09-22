@@ -2,9 +2,14 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var player = SoundPlayer()
+    @StateObject private var reviewRequestManager = ReviewRequestManager()
+    @EnvironmentObject private var purchaseManager: PurchaseManager
+    @EnvironmentObject private var adMobManager: AdMobManager
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("vg_phrase") private var phraseId = "hai"
     @AppStorage("vg_voice") private var voiceId = VoiceType.youngPolite.rawValue
     @State private var showGuide = false
+    @State private var showPremium = false
 
     private let brandColor = Color(red: 0.06, green: 0.45, blue: 0.42)
     private let brandSurface = Color(red: 0.91, green: 0.97, blue: 0.96)
@@ -22,6 +27,7 @@ struct ContentView: View {
                         phraseSection
                         voiceSection
                         reassuranceSection
+                        monetizationSection
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 18)
@@ -49,7 +55,24 @@ struct ContentView: View {
             .sheet(isPresented: $showGuide) {
                 GuideView()
             }
+            .sheet(isPresented: $showPremium) {
+                PremiumView()
+            }
             .onAppear(perform: configureForLaunchArguments)
+            .onAppear { reviewRequestManager.beginSession() }
+            .onChange(of: scenePhase) { newPhase in
+                switch newPhase {
+                case .active:
+                    reviewRequestManager.beginSession()
+                case .inactive, .background:
+                    reviewRequestManager.endSession()
+                @unknown default:
+                    break
+                }
+            }
+            .onChange(of: player.completedPlaybackCount) { _ in
+                reviewRequestManager.recordSuccessfulUse()
+            }
             .overlay { countdownOverlay }
         }
         .tint(brandColor)
@@ -304,9 +327,9 @@ struct ContentView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(brandColor)
             reassuranceRow(icon: "bell.slash.fill", text: "マナーモード中でも音が鳴ります")
-            reassuranceRow(icon: "airplane", text: "通信は不要。機内モードでも使えます")
+            reassuranceRow(icon: "airplane", text: "音声再生は通信不要。機内モードでも使えます")
             reassuranceRow(icon: "person.crop.circle.badge.xmark", text: "登録不要。アカウントはいりません")
-            reassuranceRow(icon: "lock.shield.fill", text: "データ収集なし。選択は端末内だけに保存されます")
+            reassuranceRow(icon: "lock.shield.fill", text: "セリフと声の選択は端末内だけに保存されます")
             Button {
                 showGuide = true
             } label: {
@@ -322,6 +345,61 @@ struct ContentView: View {
         }
         .padding(16)
         .background(cardBackground)
+    }
+
+    // MARK: - 広告・開発支援
+
+    @ViewBuilder
+    private var monetizationSection: some View {
+        if purchaseManager.hasRemovedAds {
+            HStack(spacing: 10) {
+                Image(systemName: "checkmark.shield.fill")
+                    .foregroundStyle(brandColor)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("広告を削除済み")
+                        .font(.subheadline.weight(.semibold))
+                    Text("ご購入ありがとうございます")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+            }
+            .padding(16)
+            .background(cardBackground)
+        } else {
+            VStack(spacing: 12) {
+                HStack {
+                    Text("広告")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("広告を削除") {
+                        showPremium = true
+                    }
+                    .font(.caption.weight(.semibold))
+                }
+
+                if adMobManager.canRequestAds {
+                    BannerAdView()
+                } else {
+                    Label("広告を準備しています", systemImage: "hourglass")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, minHeight: 54)
+                }
+
+                Button {
+                    showPremium = true
+                } label: {
+                    Label("広告を削除して開発を応援", systemImage: "heart.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 46)
+                }
+                .buttonStyle(.bordered)
+            }
+            .padding(16)
+            .background(cardBackground)
+        }
     }
 
     private func reassuranceRow(icon: String, text: String) -> some View {
@@ -429,6 +507,9 @@ struct ContentView: View {
         if arguments.contains("-vgShowGuide") {
             showGuide = true
         }
+        if arguments.contains("-vgShowPremium") {
+            showPremium = true
+        }
         if let phraseIndex = arguments.firstIndex(of: "-vgPhrase"),
            arguments.indices.contains(phraseIndex + 1) {
             phraseId = Phrase.find(arguments[phraseIndex + 1]).id
@@ -442,4 +523,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(PurchaseManager())
+        .environmentObject(AdMobManager())
 }

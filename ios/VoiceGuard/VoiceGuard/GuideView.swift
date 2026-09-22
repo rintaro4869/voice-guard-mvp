@@ -2,8 +2,11 @@ import SwiftUI
 
 struct GuideView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var purchaseManager: PurchaseManager
+    @EnvironmentObject private var adMobManager: AdMobManager
     @State private var isShowingPhraseRequest = false
     @State private var isShowingMailUnavailable = false
+    @State private var isShowingPremium = false
 
     var body: some View {
         NavigationStack {
@@ -42,6 +45,36 @@ struct GuideView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                Section("広告") {
+                    if purchaseManager.hasRemovedAds {
+                        Label("広告を削除済み", systemImage: "checkmark.shield.fill")
+                            .foregroundStyle(Color.accentColor)
+                    } else {
+                        Button {
+                            isShowingPremium = true
+                        } label: {
+                            Label("広告を削除", systemImage: "rectangle.slash")
+                        }
+                    }
+
+                    Button("購入を復元") {
+                        Task { await purchaseManager.restorePurchases() }
+                    }
+                    .disabled(purchaseManager.isLoading)
+
+                    if adMobManager.privacyOptionsRequired {
+                        Button {
+                            Task { await adMobManager.presentPrivacyOptions() }
+                        } label: {
+                            Label("広告のプライバシー設定", systemImage: "hand.raised")
+                        }
+                    }
+
+                    Text("広告は音声再生の操作から離れた位置にだけ表示します。買い切りで非表示にできます。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("リンク") {
                     Link(destination: URL(string: "https://voiceguardhitoribouhan.pages.dev/")!) {
                         Label("公式サイト・防犯コラム", systemImage: "globe")
@@ -62,7 +95,7 @@ struct GuideView: View {
             }
             .sheet(isPresented: $isShowingPhraseRequest) {
                 MailComposeView(
-                    recipients: ["rintaro4869@gmail.com"],
+                    recipients: ["yamadaxr.app@gmail.com"],
                     subject: "ひとり防犯ボイス：追加セリフのリクエスト",
                     body: """
                     追加してほしいセリフ：
@@ -74,10 +107,21 @@ struct GuideView: View {
                     """
                 )
             }
+            .sheet(isPresented: $isShowingPremium) {
+                PremiumView()
+            }
             .alert("メールを送信できません", isPresented: $isShowingMailUnavailable) {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text("iPhoneの「設定」でメールアカウントを追加してから、もう一度お試しください。")
+            }
+            .alert("購入について", isPresented: Binding(
+                get: { purchaseManager.errorMessage != nil },
+                set: { if !$0 { purchaseManager.errorMessage = nil } }
+            )) {
+                Button("OK", role: .cancel) { purchaseManager.errorMessage = nil }
+            } message: {
+                Text(purchaseManager.errorMessage ?? "")
             }
         }
     }
@@ -114,4 +158,6 @@ struct GuideView: View {
 
 #Preview {
     GuideView()
+        .environmentObject(PurchaseManager())
+        .environmentObject(AdMobManager())
 }

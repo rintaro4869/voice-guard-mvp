@@ -9,6 +9,7 @@ final class SoundPlayer: NSObject, ObservableObject {
     @Published var statusText = "再生ボタンを押すとすぐ流れます"
     @Published var errorText: String? = nil
     @Published var lastRandomVoice: VoiceType? = nil
+    @Published private(set) var completedPlaybackCount = 0
 
     private var player: AVAudioPlayer?
     private var countdownTask: Task<Void, Never>? = nil
@@ -108,6 +109,9 @@ extension SoundPlayer: AVAudioPlayerDelegate {
     nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         Task { @MainActor in
             self.isPlaying = false
+            if flag {
+                self.completedPlaybackCount += 1
+            }
             self.statusText = "再生しました。もう一度押すと再生できます"
         }
     }
