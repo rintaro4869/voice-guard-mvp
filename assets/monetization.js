@@ -3,6 +3,13 @@
 
   var ENTRY_PARAM_KEYS = ['mt_from', 'mt_slot', 'mt_kind'];
 
+  function normalizeAnalyticsValue(value, maxLength) {
+    return String(value || '')
+      .replace(/[\u0000-\u001f\u007f]/g, '')
+      .trim()
+      .slice(0, maxLength || 80);
+  }
+
   function fireEvent(name, params) {
     if (typeof window.gtag === 'function') {
       window.gtag('event', name, params);
@@ -34,9 +41,9 @@
     try {
       var params = new URLSearchParams(window.location.search);
       var entry = {
-        from: params.get('mt_from') || '',
-        slot: params.get('mt_slot') || '',
-        kind: params.get('mt_kind') || ''
+        from: normalizeAnalyticsValue(params.get('mt_from'), 80),
+        slot: normalizeAnalyticsValue(params.get('mt_slot'), 80),
+        kind: normalizeAnalyticsValue(params.get('mt_kind'), 80)
       };
       window.__vgMonetizationEntry = entry;
       return entry;
@@ -126,9 +133,9 @@
     }
 
     fireEvent('monetization_landing', {
-      page: window.location.pathname,
-      page_key: getPageKey(window.location.pathname),
-      page_role: getPageRole(),
+      page: normalizeAnalyticsValue(window.location.pathname, 160),
+      page_key: normalizeAnalyticsValue(getPageKey(window.location.pathname), 80),
+      page_role: normalizeAnalyticsValue(getPageRole(), 80),
       entry_from: entry.from,
       entry_slot: entry.slot,
       entry_kind: entry.kind
@@ -154,22 +161,25 @@
     var isAffiliate = anchor.hasAttribute('data-aff-key');
 
     fireEvent('monetization_cta_click', {
-      page: window.location.pathname,
-      page_key: getPageKey(window.location.pathname),
-      page_role: getPageRole(),
-      cta_kind: isAffiliate ? 'affiliate' : (anchor.getAttribute('data-cta-kind') || ''),
-      slot: anchor.getAttribute('data-slot') || '',
+      page: normalizeAnalyticsValue(window.location.pathname, 160),
+      page_key: normalizeAnalyticsValue(getPageKey(window.location.pathname), 80),
+      page_role: normalizeAnalyticsValue(getPageRole(), 80),
+      cta_kind: normalizeAnalyticsValue(
+        isAffiliate ? 'affiliate' : anchor.getAttribute('data-cta-kind'),
+        80
+      ),
+      slot: normalizeAnalyticsValue(anchor.getAttribute('data-slot'), 80),
       cta_label: trimLabel(anchor.textContent),
-      target_host: url.host || '',
-      target_path: url.pathname || '',
+      target_host: normalizeAnalyticsValue(url.host, 255),
+      target_path: normalizeAnalyticsValue(url.pathname, 500),
       target_type: url.origin === window.location.origin ? 'internal' : 'external',
       entry_from: entry.from,
       entry_slot: entry.slot,
       entry_kind: entry.kind,
-      aff_key: anchor.getAttribute('data-aff-key') || '',
-      aff_status: anchor.getAttribute('data-aff-status') || '',
-      aff_item: anchor.getAttribute('data-item') || '',
-      aff_network: anchor.getAttribute('data-network') || ''
+      aff_key: normalizeAnalyticsValue(anchor.getAttribute('data-aff-key'), 80),
+      aff_status: normalizeAnalyticsValue(anchor.getAttribute('data-aff-status'), 40),
+      aff_item: normalizeAnalyticsValue(anchor.getAttribute('data-item'), 80),
+      aff_network: normalizeAnalyticsValue(anchor.getAttribute('data-network'), 40)
     });
   }
 

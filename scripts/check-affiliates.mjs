@@ -3,7 +3,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -14,7 +14,26 @@ const mdReportPath = path.join(reportDir, 'affiliate-health.md');
 
 const args = new Set(process.argv.slice(2));
 const writeMode = args.has('--write');
-const timeoutMs = Number(process.env.AFFILIATE_CHECK_TIMEOUT_MS || 15000);
+const DEFAULT_TIMEOUT_MS = 15000;
+const DEFAULT_MAX_BODY_BYTES = 2 * 1024 * 1024;
+const MAX_CONFIGURED_BODY_BYTES = 10 * 1024 * 1024;
+const ALLOWED_AFFILIATE_HOSTS = new Set([
+  'a.r10.to',
+  'search.rakuten.co.jp',
+  'item.rakuten.co.jp',
+  'www.rakuten.co.jp',
+  'hb.afl.rakuten.co.jp'
+]);
+const timeoutMs = parsePositiveInteger(
+  process.env.AFFILIATE_CHECK_TIMEOUT_MS,
+  DEFAULT_TIMEOUT_MS,
+  120000
+);
+const maxBodyBytes = parsePositiveInteger(
+  process.env.AFFILIATE_CHECK_MAX_BODY_BYTES,
+  DEFAULT_MAX_BODY_BYTES,
+  MAX_CONFIGURED_BODY_BYTES
+);
 const defaultUnavailablePatterns = [
   '売り切れ',
   '在庫切れ',
@@ -27,15 +46,79 @@ const defaultUnavailablePatterns = [
   '入荷待ち'
 ];
 
-if (args.has('--help')) {
-  console.log('Usage: node scripts/check-affiliates.mjs [--write]');
-  console.log('');
-  console.log('--write  assets/affiliate-links.json の url/status を更新する');
-  process.exit(0);
+export class BodyTooLargeError extends Error {
+  constructor(limit) {
+    super('Response body exceeds ' + limit + ' bytes');
+    this.name = 'BodyTooLargeError';
+  }
 }
 
-if (typeof fetch !== 'function') {
-  throw new Error('Global fetch is not available. Use Node.js 18+.');
+export function parsePositiveInteger(rawValue, fallback, maximum) {
+  if (rawValue === undefined || rawValue === null || rawValue === '') {
+    return fallback;
+  }
+
+  const parsed = Number(rawValue);
+  if (!Number.isSafeInteger(parsed) || parsed <= 0 || parsed > maximum) {
+    throw new Error('Expected an integer between 1 and ' + maximum);
+  }
+
+  return parsed;
+}
+
+export function validateAffiliateUrl(value, fieldName = 'url') {
+  if (!value) {
+    return '';
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch (error) {
+    throw new Error(fieldName + ' must be an absolute URL');
+  }
+
+  if (parsed.protocol !== 'https:' || !ALLOWED_AFFILIATE_HOSTS.has(parsed.hostname)) {
+    throw new Error(fieldName + ' is not an approved HTTPS affiliate URL');
+  }
+
+  return value;
+}
+
+export async function readResponseText(response, limit = maxBodyBytes) {
+  const contentLength = Number(response.headers.get('content-length'));
+  if (Number.isFinite(contentLength) && contentLength > limit) {
+    throw new BodyTooLargeError(limit);
+  }
+
+  if (!response.body) {
+    return '';
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  const chunks = [];
+  let received = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+
+      received += value.byteLength;
+      if (received > limit) {
+        await reader.cancel();
+        throw new BodyTooLargeError(limit);
+      }
+      chunks.push(decoder.decode(value, { stream: true }));
+    }
+    chunks.push(decoder.decode());
+    return chunks.join('');
+  } finally {
+    reader.releaseLock();
+  }
 }
 
 function normalizeEntry(key, value) {
@@ -43,8 +126,14 @@ function normalizeEntry(key, value) {
   const primaryUrl = typeof rawEntry.primaryUrl === 'string' && rawEntry.primaryUrl
     ? rawEntry.primaryUrl
     : (typeof rawEntry.url === 'string' ? rawEntry.url : '');
-  const fallbackUrl = typeof rawEntry.fallbackUrl === 'string' ? rawEntry.fallbackUrl : '';
-  const url = typeof rawEntry.url === 'string' && rawEntry.url ? rawEntry.url : primaryUrl;
+  const fallbackUrl = validateAffiliateUrl(
+    typeof rawEntry.fallbackUrl === 'string' ? rawEntry.fallbackUrl : '',
+    key + '.fallbackUrl'
+  );
+  const url = validateAffiliateUrl(
+    typeof rawEntry.url === 'string' && rawEntry.url ? rawEntry.url : primaryUrl,
+    key + '.url'
+  );
   const status = typeof rawEntry.status === 'string' && rawEntry.status ? rawEntry.status : 'ok';
   const unavailablePatterns = Array.isArray(rawEntry.unavailablePatterns)
     ? rawEntry.unavailablePatterns.filter(function (pattern) {
@@ -58,7 +147,7 @@ function normalizeEntry(key, value) {
     label: typeof rawEntry.label === 'string' && rawEntry.label ? rawEntry.label : key,
     network: typeof rawEntry.network === 'string' ? rawEntry.network : '',
     url,
-    primaryUrl,
+    primaryUrl: validateAffiliateUrl(primaryUrl, key + '.primaryUrl'),
     fallbackUrl,
     status,
     unavailablePatterns
@@ -111,7 +200,7 @@ async function fetchPage(url, patterns) {
       }
     });
 
-    const body = await response.text();
+    const body = await readResponseText(response);
     const text = buildSearchText(response.url, body);
     const matchedPattern = findMatchedPattern(text, patterns);
 
@@ -130,7 +219,9 @@ async function fetchPage(url, patterns) {
       httpStatus: null,
       finalUrl: url,
       matchedPattern: '',
-      reason: error && error.name === 'AbortError' ? 'timeout' : 'fetch_error'
+      reason: error && error.name === 'AbortError'
+        ? 'timeout'
+        : (error instanceof BodyTooLargeError ? 'body_too_large' : 'fetch_error')
     };
   } finally {
     clearTimeout(timeoutId);
@@ -331,7 +422,23 @@ async function main() {
   printSummary(report);
 }
 
-main().catch(function (error) {
-  console.error(error);
-  process.exit(1);
-});
+const isMainModule = Boolean(
+  process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
+);
+
+if (isMainModule) {
+  if (args.has('--help')) {
+    console.log('Usage: node scripts/check-affiliates.mjs [--write]');
+    console.log('');
+    console.log('--write  assets/affiliate-links.json の url/status を更新する');
+  } else {
+    if (typeof fetch !== 'function') {
+      throw new Error('Global fetch is not available. Use Node.js 18+.');
+    }
+
+    main().catch(function (error) {
+      console.error(error);
+      process.exit(1);
+    });
+  }
+}

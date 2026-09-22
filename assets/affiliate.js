@@ -2,10 +2,40 @@
   'use strict';
 
   var LINKS_URL = '/assets/affiliate-links.json';
+  var ALLOWED_AFFILIATE_HOSTS = {
+    'a.r10.to': true,
+    'search.rakuten.co.jp': true,
+    'item.rakuten.co.jp': true,
+    'www.rakuten.co.jp': true,
+    'hb.afl.rakuten.co.jp': true
+  };
+
+  function normalizeAnalyticsValue(value, maxLength) {
+    return String(value || '')
+      .replace(/[\u0000-\u001f\u007f]/g, '')
+      .trim()
+      .slice(0, maxLength || 80);
+  }
+
+  function resolveTrustedUrl(value) {
+    if (!value) {
+      return '';
+    }
+
+    try {
+      var url = new URL(value);
+      if (url.protocol !== 'https:' || !ALLOWED_AFFILIATE_HOSTS[url.hostname]) {
+        return '';
+      }
+      return url.href;
+    } catch (error) {
+      return '';
+    }
+  }
 
   function resolveEntry(entry) {
     if (typeof entry === 'string') {
-      return { url: entry, status: '' };
+      return { url: resolveTrustedUrl(entry), status: '' };
     }
 
     if (!entry || typeof entry !== 'object') {
@@ -13,8 +43,8 @@
     }
 
     return {
-      url: entry.url || entry.primaryUrl || '',
-      status: entry.status || ''
+      url: resolveTrustedUrl(entry.url || entry.primaryUrl || ''),
+      status: normalizeAnalyticsValue(entry.status || '', 40)
     };
   }
 
@@ -26,9 +56,9 @@
     try {
       var params = new URLSearchParams(window.location.search);
       var entry = {
-        from: params.get('mt_from') || '',
-        slot: params.get('mt_slot') || '',
-        kind: params.get('mt_kind') || ''
+        from: normalizeAnalyticsValue(params.get('mt_from'), 80),
+        slot: normalizeAnalyticsValue(params.get('mt_slot'), 80),
+        kind: normalizeAnalyticsValue(params.get('mt_kind'), 80)
       };
       window.__vgMonetizationEntry = entry;
       return entry;
@@ -68,13 +98,13 @@
     el.addEventListener('click', function () {
       var entry = readEntryParams();
       var params = {
-        page: window.location.pathname,
-        slot: el.getAttribute('data-slot') || '',
-        item: el.getAttribute('data-item') || '',
-        network: el.getAttribute('data-network') || '',
-        destination: el.href || el.getAttribute('href') || '',
-        aff_key: el.getAttribute('data-aff-key') || '',
-        aff_status: el.getAttribute('data-aff-status') || '',
+        page: normalizeAnalyticsValue(window.location.pathname, 160),
+        slot: normalizeAnalyticsValue(el.getAttribute('data-slot'), 80),
+        item: normalizeAnalyticsValue(el.getAttribute('data-item'), 80),
+        network: normalizeAnalyticsValue(el.getAttribute('data-network'), 40),
+        destination: normalizeAnalyticsValue(el.href || el.getAttribute('href'), 500),
+        aff_key: normalizeAnalyticsValue(el.getAttribute('data-aff-key'), 80),
+        aff_status: normalizeAnalyticsValue(el.getAttribute('data-aff-status'), 40),
         link_label: trimLabel(el.textContent),
         entry_from: entry.from,
         entry_slot: entry.slot,

@@ -1,4 +1,5 @@
-const CACHE_NAME = "voiceguard-static-v3";
+const CACHE_PREFIX = "voiceguard-static-";
+const CACHE_NAME = `${CACHE_PREFIX}v4`;
 
 const CORE_ASSETS = [
   "/",
@@ -21,6 +22,30 @@ const CORE_ASSETS = [
   "/assets/audio/young_blunt/shoushou.wav"
 ];
 
+const CORE_ASSET_PATHS = new Set(CORE_ASSETS);
+const PUBLIC_ASSET_EXTENSION = /\.(?:css|js|json|png|jpe?g|svg|webp|wav|mp3|woff2?)$/i;
+
+function isPublicNavigationPath(pathname) {
+  return pathname === "/" || /^\/[a-z0-9-]+\.html$/i.test(pathname);
+}
+
+function isPublicAssetPath(pathname) {
+  if (CORE_ASSET_PATHS.has(pathname)) {
+    return true;
+  }
+
+  return pathname.startsWith("/assets/") && PUBLIC_ASSET_EXTENSION.test(pathname);
+}
+
+async function fetchAndCache(request, cacheKey) {
+  const response = await fetch(request);
+  if (response && response.status === 200 && response.type === "basic") {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(cacheKey, response.clone());
+  }
+  return response;
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
@@ -32,7 +57,7 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key !== CACHE_NAME)
+          .filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME)
           .map((key) => caches.delete(key))
       )
     ).then(() => self.clients.claim())
@@ -50,15 +75,14 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (event.request.mode === "navigate") {
+    if (!isPublicNavigationPath(requestUrl.pathname)) {
+      return;
+    }
+
     const cacheKey = requestUrl.pathname === "/" ? "/index.html" : requestUrl.pathname;
 
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, responseClone));
-          return response;
-        })
+      fetchAndCache(event.request, cacheKey)
         .catch(() =>
           caches.match(cacheKey).then((cachedResponse) => cachedResponse || caches.match("/index.html"))
         )
@@ -66,21 +90,17 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (!isPublicAssetPath(requestUrl.pathname)) {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+    caches.match(requestUrl.pathname).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
 
-      return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type !== "basic") {
-          return response;
-        }
-
-        const responseClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-        return response;
-      });
+      return fetchAndCache(event.request, requestUrl.pathname);
     })
   );
 });

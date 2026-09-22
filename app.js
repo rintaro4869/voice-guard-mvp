@@ -602,23 +602,30 @@ function getInitialPhraseId() {
   if (isValidPhraseId(launchParams.phrase)) {
     return launchParams.phrase;
   }
-  return loadValue(STORAGE_KEYS.phrase, phrases[0].id);
+  const storedPhraseId = loadValue(STORAGE_KEYS.phrase, phrases[0].id);
+  return isValidPhraseId(storedPhraseId) ? storedPhraseId : phrases[0].id;
 }
 
 function getInitialVoiceId() {
   if (isValidVoiceId(launchParams.voice)) {
     return launchParams.voice;
   }
-  return loadValue(STORAGE_KEYS.voice, voices[0].id);
+  const storedVoiceId = loadValue(STORAGE_KEYS.voice, voices[0].id);
+  return isValidVoiceId(storedVoiceId) ? storedVoiceId : voices[0].id;
+}
+
+function normalizeLaunchIdentifier(value) {
+  const normalized = String(value || "").trim().slice(0, 64);
+  return /^[a-z0-9_-]*$/i.test(normalized) ? normalized : "";
 }
 
 function getLaunchParams() {
   try {
     const params = new URLSearchParams(window.location.search);
     return {
-      source: params.get("source") || "",
-      phrase: params.get("phrase") || "",
-      voice: params.get("voice") || ""
+      source: normalizeLaunchIdentifier(params.get("source")),
+      phrase: normalizeLaunchIdentifier(params.get("phrase")),
+      voice: normalizeLaunchIdentifier(params.get("voice"))
     };
   } catch (error) {
     return {
