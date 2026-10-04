@@ -487,7 +487,7 @@ function scrollToPrimaryControls() {
 }
 
 function trackLinkClick(event) {
-  const anchor = event.target.closest("a[href]");
+  const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
   if (!anchor) {
     return;
   }
