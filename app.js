@@ -509,7 +509,7 @@ function trackLinkClick(event) {
     return;
   }
 
-  if (url.host === "apps.apple.com" && anchor.dataset.ctaKind === "app_store") {
+  if (url.host === "apps.apple.com" && /\/id6803588933(?:\/|$)/.test(url.pathname)) {
     trackEvent("app_store_cta_click", {
       slot: anchor.dataset.slot || "unknown",
       device_type: deviceType
