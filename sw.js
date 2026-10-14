@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "voiceguard-static-";
-const CACHE_NAME = `${CACHE_PREFIX}v4`;
+const CACHE_NAME = `${CACHE_PREFIX}quality-20261014`;
 
 const CORE_ASSETS = [
   "/",

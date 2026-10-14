@@ -12,3 +12,6 @@ ios/build/
 *.p12
 *.mobileprovision
 credentials.json
+
+# Generated public website output
+dist/

@@ -13,8 +13,8 @@
   </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ホーム画面に追加する方法｜インターホン男性の声サイトをすぐ使う準備 | ひとり防犯ボイス</title>
-  <meta name="description" content="ひとり防犯ボイスをホーム画面に追加し、音量確認・再生準備・トラブル対応までまとめた使い方ガイド。インターホンが鳴ったときにすぐ開けるようにするページです。" />
+  <title>ひとり防犯ボイスの使い方｜音量確認・インターホンへの伝え方</title>
+  <meta name="description" content="セリフ・声の選択、スピーカー出力、ホーム画面追加、再生できないときの切り分けをまとめたWeb版の操作ガイドです。" />
   <link rel="canonical" href="https://voiceguardhitoribouhan.pages.dev/guide" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
@@ -22,8 +22,8 @@
   <meta name="theme-color" content="#2a9d8f" />
   <link rel="stylesheet" href="./styles.css" />
 
-  <meta property="og:title" content="ホーム画面に追加する方法｜インターホン男性の声サイトをすぐ使う準備" />
-  <meta property="og:description" content="ひとり防犯ボイスをすぐ使うための準備ガイド。ホーム画面追加、音量確認、トラブル対応をまとめています。" />
+  <meta property="og:title" content="ひとり防犯ボイスの使い方" />
+  <meta property="og:description" content="セリフ・声の選択、スピーカー出力、ホーム画面追加、再生できないときの切り分けをまとめたWeb版の操作ガイドです。" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://voiceguardhitoribouhan.pages.dev/guide" />
   <meta property="og:site_name" content="ひとり防犯ボイス" />
@@ -33,251 +33,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "ひとり防犯ボイスをすぐ使う準備ガイド",
-    "description": "ホーム画面追加、音量確認、再生準備をまとめたセットアップ手順です。",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "準備",
-        "text": "玄関に近い場所でスマホの音量を確認し、使いたいセリフを選びます。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "声タイプを選ぶ",
-        "text": "若め（丁寧）または若め（少し素っ気ない）を選択し、おまかせも活用します。"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "再生",
-        "text": "インターホンが鳴ったらワンタップで再生し、必要なら停止します。"
-      }
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {"@type":"ListItem","position":1,"name":"トップ","item":"https://voiceguardhitoribouhan.pages.dev/"},
-      {"@type":"ListItem","position":2,"name":"ホーム画面追加と準備ガイド","item":"https://voiceguardhitoribouhan.pages.dev/guide"}
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Androidで使えますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "はい。ChromeブラウザでURLを開けばアプリのインストールなしにすぐ使えます。ホーム画面に追加すれば通常のアプリと同じように起動できます。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "コエマモとの違いは？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "ひとり防犯ボイスはアカウント登録不要・完全無料で、ブラウザを開けばすぐ使えます。インターホン対応の配達シーンに特化したシンプルな設計です。"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "合成音声ですか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "いいえ。あらかじめ録音した自然な男性音声ファイルを再生します。不自然さがありません。"
-        }
-      }
-    ]
-  }
-  </script>
-</head>
-<body data-page-role="guide">
-  <div class="ambient"></div>
-  <header class="page-hero">
-    <div class="badge">使い方ガイド</div>
-    <h1>ホーム画面に追加して、すぐ使える状態にする方法</h1>
-    <p>このページは、ひとり防犯ボイスを「インターホンが鳴った瞬間に迷わず開ける状態」に整えるための準備ガイドです。ホーム画面追加、音量確認、再生前のチェックをまとめています。</p>
-    <div class="page-meta">最終更新: 2026-05-23</div>
-    <div class="hero-actions">
-      <a class="btn primary" href="./?source=guide">アプリに戻る</a>
-      <a class="btn ghost" href="./blog-2026-02-07-1">玄関防犯の3ステップ</a>
-    </div>
-  </header>
-
-  <nav class="breadcrumbs">
-    <a href="./?source=guide">トップへ戻る</a>
-  </nav>
-
-  <main class="container">
-    <section class="card article">
-      <h2>このガイドでできること</h2>
-      <p>検索から来たあとに、そのまま閉じずに使える状態まで持っていくための準備だけをまとめています。</p>
-      <ul>
-        <li>ホーム画面に追加して次回以降を速くする</li>
-        <li>インターホン前に迷わない音量・声タイプ準備</li>
-        <li>再生されないときの確認ポイント</li>
-      </ul>
-    </section>
-
-    <section class="card article">
-      <h2>使う前の準備（3ステップ）</h2>
-      <ol>
-        <li>まずホーム画面に追加し、ワンタップで開けるようにします。</li>
-        <li>よく使うセリフと声タイプを決めておきます。</li>
-        <li>音量を確認し、インターホンが鳴ったら再生します。</li>
-      </ol>
-      <div class="callout">迷ったときは「玄関の前に置いといてください」と「若めの声（丁寧）」を先に選んでおくと、置き配対応で最も使いやすいです。</div>
-    </section>
-
-    <section class="card article">
-      <h2>ホーム画面に追加しておく</h2>
-      <p>Voiceguard はブラウザで使えますが、検索から毎回開くよりホーム画面から起動したほうが実用的です。初回だけ設定しておくと、次回以降は通常のアプリのように開けます。</p>
-      <h3>iPhone の場合</h3>
-      <ol>
-        <li>Safari でこのページを開く</li>
-        <li>共有ボタンをタップする</li>
-        <li>「ホーム画面に追加」を選ぶ</li>
-        <li>右上の「追加」をタップする</li>
-      </ol>
-      <h3>Android の場合</h3>
-      <ol>
-        <li>Chrome でこのページを開く</li>
-        <li>右上のメニューを開く</li>
-        <li>「ホーム画面に追加」を選ぶ</li>
-        <li>追加を確定する</li>
-      </ol>
-    </section>
-
-    <section class="card article">
-      <h2>事前準備チェックリスト</h2>
-      <p>配達が来る時間帯に合わせて、以下の3つだけ確認しておくと安心です。ここが整っていれば、インターホンが鳴ってから焦る時間をかなり減らせます。</p>
-      <ul>
-        <li>スマホの音量が小さすぎないか</li>
-        <li>よく使うセリフが選びやすい位置にあるか</li>
-        <li>声タイプは「おまかせ」か固定かを決めておく</li>
-      </ul>
-      <p>忙しいときほど、短い準備で不安が減ります。</p>
-    </section>
-
-    <section class="card article">
-      <h2>シーン別の使い方</h2>
-      <h3>置き配をお願いしたいとき</h3>
-      <p>短い依頼のほうが自然に伝わるので、置き配のお願いを一言で再生します。</p>
-      <ul>
-        <li>おすすめセリフ: 「玄関の前に置いといてください」</li>
-        <li>ポイント: 返答後はインターホン越しに追加の説明は不要</li>
-      </ul>
-
-      <h3>玄関に出る前に返答したいとき</h3>
-      <p>「はい」「はーい」「ありがとうございます」など短い返答で対応します。</p>
-      <ul>
-        <li>おすすめセリフ: 「はい」「はーい」</li>
-        <li>ポイント: 返答は短く、ゆっくり再生</li>
-      </ul>
-
-      <h3>少し待ってほしいとき</h3>
-      <p>時間が必要な場合は「少々お待ちください」を使います。</p>
-      <ul>
-        <li>おすすめセリフ: 「少々お待ちください」</li>
-        <li>ポイント: 再生後は落ち着いて準備</li>
-      </ul>
-    </section>
-
-    <section class="card article">
-      <h2>声タイプの選び方</h2>
-      <p>声タイプは印象が変わるため、状況に合わせて使い分けるのがおすすめです。</p>
-      <ul>
-        <li>丁寧な印象にしたい: 若め（丁寧）</li>
-        <li>短く素早く返したい: 若め（少し素っ気ない）</li>
-        <li>迷ったら: おまかせ</li>
-      </ul>
-      <p>同じ配達員でも印象が変わるので、繰り返し利用時の安心感が上がります。</p>
-    </section>
-
-    <section class="card article">
-      <h2>おまかせの使いどころ</h2>
-      <p>声タイプを「おまかせ」にすると、ページを開いた時に1つ自動で選ばれ、開き直すまで同じ声を使います。</p>
-      <ul>
-        <li>普段は固定、相手に慣れられないようにしたいときに有効</li>
-        <li>次回起動時に別の声に切り替わるため、同じ配達員でも印象が変わる</li>
-      </ul>
-    </section>
-
-    <section class="card article">
-      <h2>再生されないときのチェック</h2>
-      <ul>
-        <li>端末の音量が小さすぎないか確認</li>
-        <li>セリフと声タイプの選択が完了しているか確認</li>
-        <li>通信が不安定な場合はもう一度再生</li>
-      </ul>
-      <p>それでも再生されない場合は、ページを再読み込みしてからもう一度試してください。</p>
-    </section>
-
-    <section class="card article">
-      <h2>安心のための使い方ルール</h2>
-      <p>このアプリは配達対応の不安を軽くするための補助ツールです。無理に玄関を開けず、必要に応じて置き配を活用してください。</p>
-    </section>
-
-    <section class="card article">
-      <h2>次の一手：防犯アイテム比較</h2>
-      <p>無料運用のまま続けるか、ドアホンや防犯ブザーを追加するかを用途別に比較できます。今の不安が「玄関対応」なのか「外出時」なのかで次に見るページを分けるのがおすすめです。</p>
-      <div class="hero-actions">
-        <a class="btn" href="./safety-plan" data-cta-kind="internal_hub" data-slot="guide_next_hub">防犯アイテム比較を見る</a>
-        <a class="btn" href="./recommend-intercom" data-cta-kind="internal_compare" data-slot="guide_next_intercom">スマートドアホン比較を見る</a>
-      </div>
-      <p class="disclosure">※外部購入を検討する場合は、型番・価格・レビューを複数サイトで比較してください。</p>
-    </section>
-
-    <section class="card article">
-      <h2>引っ越し直後なら先にこれ</h2>
-      <p>まだ何を買うか決める前なら、無料の `引っ越し初日の防犯チェックリスト` で、玄関・窓・置き配・夜道の不安を整理してから比較ページへ進む方が合っています。</p>
-      <div class="hero-actions">
-        <a class="btn" href="./hikkoshi-bouhan-checklist" data-cta-kind="internal_resource" data-slot="guide_checklist_primary">無料チェックリストを見る</a>
-        <a class="btn" href="./recommend-buzzer" data-cta-kind="internal_compare" data-slot="guide_checklist_buzzer">防犯ブザー比較を見る</a>
-      </div>
-    </section>
-
-    <section class="card article">
-      <h2>よくある質問</h2>
-      <ul>
-        <li>ホーム画面に追加すると何が変わりますか？ 検索し直さずにすぐ開けるので、実際の配達対応で使いやすくなります。</li>
-        <li>無料で使えますか？ はい。登録不要・インストール不要でそのまま使えます。</li>
-        <li>再生ボタンはどこですか？ セリフの横にある「再生」をタップします。</li>
-        <li>ワンタップで止められますか？ はい、停止ボタンで途中停止できます。</li>
-        <li>一人暮らしの防犯にも使えますか？ はい。男の声で返答したいときの補助として使えます。</li>
-        <li>声が小さい場合は？ 端末の音量を上げてから再生してください。</li>
-      </ul>
-    </section>
-
-    <section class="card article">
-      <h2>関連ページ・関連記事</h2>
-      <ul class="list">
-        <li><a href="./android-intercom-voice">Androidで使えるインターホン男性の声アプリ｜無料・インストール不要</a></li>
-        <li><a href="./intercom-voice-app">インターホン対応音声アプリの使い方｜置き配・防犯に使える無料ツール</a></li>
-        <li><a href="./blog-intercom-denai">一人暮らしでインターホンに出ないのはあり？安全な対処法と置き配のコツ</a></li>
-        <li><a href="./hitorigurashi-dansei-koe">一人暮らしで男性の声を使う防犯対策｜インターホン対応を安全にする方法</a></li>
-        <li><a href="./faq">よくある質問｜インターホン対応音声アプリの使い方</a></li>
-      </ul>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>ひとり防犯ボイス ガイド</p>
-    <p><a href="./disclosure">広告掲載・アフィリエイト開示</a></p>
-  </footer>
-
-  <script src="/assets/monetization.js" defer></script>
-  <script src="/assets/affiliate.js" defer></script>
-</body>
-</html>
+</head><body><div class="ambient"></div><header class="page-hero"><div class="badge">使い方ガイド</div><h1>ひとり防犯ボイスの使い方</h1><p>スマホで鳴らす準備から、インターホン越しの聞こえ方の確認まで。</p><p class="page-meta">最終更新: 2026-10-14</p><a class="btn primary" href="./">音声ツールを開く</a></header><main class="container"><section class="card article">
+<h2>1. まずスマホだけで試す</h2>
+<ol class="steps"><li><a href="./#mainPlayCard">音声ツールのトップページ</a>を開きます。初回の音声読み込みには通信が必要です。</li><li>「置き配をお願いしたい」などのシーンを選ぶか、セリフと声タイプを自分で選びます。</li><li>「選んだ内容で再生」を押します。停止ボタンで途中停止できます。</li><li>室内で音が聞こえることを確認し、端末の音量ボタンで調整します。</li></ol><p>まず控えめな音量から試してください。イヤホンやBluetooth機器へ音が出ている場合は、スマホ本体のスピーカーへ出力を戻します。再生はボタンを押したときに始まり、インターホンの呼び出しと自動連動はしません。</p>
+</section><section class="card article">
+<h2>2. インターホンの外側に届くか確認する</h2>
+<p>スマホとインターホンの間に専用接続はありません。室内側のインターホンのマイクにスマホのスピーカーを近づけて、音を拾ってもらう使い方です。</p><ol class="steps"><li>配達の予定がない時間に、信頼できる人へ外側で聞こえ方を確認してもらいます。</li><li>インターホンの通話をつなぎます。機種の操作方法は説明書で確認してください。</li><li>短いフレーズを再生し、外側で言葉が聞き取れるか確認します。</li><li>聞き取りにくければスマホの向き・距離・音量を変え、もう一度試します。</li></ol><p>端末・インターホン・周囲の騒音によって結果は変わります。外側で試せていない場合は、届くことを確認済みとは扱わないでください。</p>
+</section><section class="card article">
+<h2>3. フレーズと声を決めておく</h2>
+<div class="compare-wrap"><table class="compare-table"><caption>在宅時の短い返答の例</caption><thead><tr><th scope="col">場面</th><th scope="col">セリフ</th><th scope="col">先に確認すること</th></tr></thead><tbody><tr><td>ひとまず返答する</td><td>はい／はーい</td><td>訪問予定と相手の用件</td></tr><tr><td>置き配をお願いする</td><td>玄関の前に置いといてください</td><td>その荷物が置き配に対応しているか、置き場所に支障がないか</td></tr><tr><td>準備の時間がほしい</td><td>少々お待ちください</td><td>相手が待てるか、追加の説明が必要か</td></tr><tr><td>お礼を伝える</td><td>ありがとうございます</td><td>受け渡しや依頼が完了したか</td></tr></tbody></table></div><p>声は「若めの声（丁寧）」と「若めの声（少し素っ気ない）」を選べます。「おまかせ」はページを開いたときに1つ選び、そのページを開いている間は同じ声です。次回も同じ声になることがあります。</p><p>前回の選択はブラウザ内に保存されます。配達前にページを開き、選択中のセリフと声を見て確認してください。録音音声の使用に気づかれないことや、防犯効果を保証する機能ではありません。</p>
+</section><section class="card article">
+<h2>4. よく使う場合はホーム画面へ</h2>
+<h3>iPhoneのSafari</h3><ol class="steps"><li><a href="./">音声ツールのトップページ</a>をSafariで開きます。このガイドではなく、再生できるページを追加してください。</li><li>共有メニューを開き、「ホーム画面に追加」を選びます。</li><li>追加したアイコンから開き、音声再生を確認します。</li></ol><h3>AndroidのChrome</h3><ol class="steps"><li><a href="./">音声ツールのトップページ</a>をChromeで開きます。</li><li>ブラウザのメニューから「ホーム画面に追加」または表示されるインストール項目を選びます。</li><li>追加したアイコンから開き、音声再生を確認します。</li></ol><p>表示名や場所は端末・ブラウザの版で異なります。SNS内のブラウザで項目が見つからないときは、SafariまたはChromeで開き直してください。ホーム画面に追加するだけで音量やオフライン利用が保証されるわけではありません。</p>
+</section><section class="card article">
+<h2>再生できないときの切り分け</h2>
+<div class="compare-wrap"><table class="compare-table"><caption>症状から確認する順番</caption><thead><tr><th scope="col">症状</th><th scope="col">確認すること</th></tr></thead><tbody><tr><td>操作しても音が出ない</td><td>音量・ミュート設定を確認し、イヤホンやBluetoothへの出力を確認。通信を確保して再読み込みし、再生ボタンを押す。</td></tr><tr><td>スマホでは鳴るが相手に届かない</td><td>インターホンの通話状態、室内マイクの位置、スピーカーの向きと距離を確認。</td></tr><tr><td>ホーム画面から開くと使い方記事が出る</td><td>追加したURLを確認。再生できるトップページを開き直してから追加する。</td></tr><tr><td>通信を切ると再生できない</td><td>音声が保存されていない可能性がある。通信を戻して試す。Web版のキャッシュは消える場合があるので、配達前に通信を切った状態で確認。</td></tr></tbody></table></div><p>うまくいかないときは、繰り返し鳴らす前に停止し、端末とブラウザ、症状を整理してください。<a href="./about#contact">不具合の連絡先</a>へ個人を特定する住所などを記載せずお知らせください。</p>
+</section><section class="card article">
+<h2>道具の選び方と利用の限界</h2>
+<p>短い返答だけを今すぐ試したい場合はWeb版から始められます。スマホなしの物理ボタンを希望する場合は<a href="./blog-outoukun-review">応答くんの仕様比較</a>、外出時の通知なども必要な場合は<a href="./blog-koemamo-comparison">コエマモの公式機能比較</a>を確認できます。</p><p>このツールには身元確認・犯罪検知・緊急通知はありません。知らない訪問者に不安を感じる場合は、音声で応答することより、ドアを開けずに相手を確認することを優先してください。</p><p><a href="https://www.keishicho.metro.tokyo.lg.jp/kurashi/higai/akisu/visitor_theft.html" target="_blank" rel="noopener noreferrer">警視庁の訪問者への注意喚起</a>も参考になります。</p>
+</section></main><footer class="footer"><nav aria-label="サイト情報"><a href="./">音声ツール</a> · <a href="./guide">使い方</a> · <a href="./about">運営者・お問い合わせ</a> · <a href="./privacy">プライバシー</a> · <a href="./disclosure">広告掲載方針</a></nav></footer></body></html>
